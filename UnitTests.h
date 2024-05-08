@@ -31,7 +31,7 @@ bool LinkedListUnitTest2() {
     return expected == actual;
 }
 
-bool testLinkedListCopyConstructor() {
+bool LinkedListCopyConstructorTest1() {
     LinkedList list1;
     list1.addNode("Hello");
     list1.addNode("World");
@@ -48,7 +48,7 @@ bool testLinkedListCopyConstructor() {
     return isCopyConstructorPassing;
 }
 
-bool testLinkedListCopyAssignmentOperator() {
+bool LinkedListCopyAssignmentOperatorTest1() {
     LinkedList list1;
     list1.addNode("Hello");
     list1.addNode("World");
@@ -119,8 +119,8 @@ std::string result (UnitTestFunc func, const std::string& unitTestName) {
 void runLinkedListUnitTests() {
     std::cout << result(LinkedListUnitTest1, "LinkedListUnitTest1") << std::endl;
     std::cout << result(LinkedListUnitTest2, "LinkedListUnitTest2") << std::endl;
-    std::cout << result(testLinkedListCopyConstructor, "testLinkedListCopyConstructor") << std::endl;
-    std::cout << result(testLinkedListCopyAssignmentOperator, "testLinkedListCopyAssignmentOperator") << std::endl;
+    std::cout << result(LinkedListCopyConstructorTest1, "LinkedListCopyConstructorTest1") << std::endl;
+    std::cout << result(LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1") << std::endl;
     std::cout << result(GraphUnitTest1, "GraphUnitTest1") << std::endl;
     std::cout << result(GraphUnitTest2, "GraphUnitTest2") << std::endl;
 }
