@@ -1,6 +1,6 @@
 #include <iostream>
-
+#include "UnitTests.h"
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    runLinkedListUnitTests();
     return 0;
 }

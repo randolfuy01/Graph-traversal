@@ -1,11 +1,16 @@
 #include "Graph.h"
 
-LinkedList::LinkedList(int val) {
-    head -> prev = nullptr;
+#include <utility>
+
+
+// Initialize the LinkedList with a head node
+LinkedList::LinkedList(std::string val) {
+    head = new Node();
+    head -> val = std::move(val);
     head -> next = nullptr;
-    head -> val = val;
 }
 
+// TO-DO: Destructor for the LinkedList ** FIX ME IF WRONG
 LinkedList::~LinkedList() {
     Node* current = head;
     while (current != nullptr) {
@@ -15,30 +20,80 @@ LinkedList::~LinkedList() {
     }
 }
 
-void LinkedList::addNode(int val) {
-    Node* curr = head; // start at the head
-    while (curr->next != nullptr) {
-        curr = curr-> next; // iterate through the list until we reach the end
+// Print the LinkedList ex. A -> B -> C -> D
+std::string LinkedList::printLinkedList() const {
+    std::string result;
+    Node* current = head;
+    while (current->next != nullptr) {
+        result += current->val + " -> ";
+        current = current->next;
     }
-    Node* newNode = new Node; // new node we are going to insert
-    newNode -> val = val; // set the value of new node
-    newNode -> next = nullptr; // set new node to be the last node
-    newNode -> prev = curr; // set the new node's previous node to the current node
-    curr -> next = newNode; // set the current node's next node to be the new node
+    result += current->val;
+    return result;
 }
 
-void Graph::addEdge(int source, int destination) {
-    LinkedList edge = LinkedList(source);
-    edge.addNode(destination);
-    graph.push_back(edge);
+// Add a node to the LinkedList
+void LinkedList::addNode(std::string val) const {
+    Node* current = head;
+    while (current->next != nullptr) {
+        current = current->next;
+    }
+    Node* newNode = new Node();
+    newNode -> val = std::move(val);
+    newNode -> next = nullptr;
+    current -> next = newNode;
 }
 
+
+// TO-DO: Implement or fix
+void Graph::addEdge(const std::string& vertex1, const std::string& vertex2) {
+    LinkedList* list1 = nullptr;
+    LinkedList* list2 = nullptr;
+
+    for (auto& list : graph) {
+        if (list->head->val == vertex1) {
+            list1 = list;
+        }
+        if (list->head->val == vertex2) {
+            list2 = list;
+        }
+    }
+
+    if (list1 == nullptr) {
+        list1 = new LinkedList(vertex1);
+        graph.push_back(list1);
+    }
+    if (list2 == nullptr) {
+        list2 = new LinkedList(vertex2);
+        graph.push_back(list2);
+    }
+
+    // Add the edges
+    list1->addNode(vertex2);
+    list2->addNode(vertex1);
+}
+
+std::string Graph::printGraph() const {
+    std::string result;
+    for (auto & i : graph) {
+        result += i->printLinkedList() + "\n";
+    }
+    return result;
+}
+
+// TO-DO: Implement or fix
 Graph::~Graph() {
     for (auto & i : graph) {
-        i.~LinkedList();
+        delete i;
     }
 }
 
-Graph::Graph(int val) : LinkedList(val) {
-    graph = std::vector<LinkedList>();
+Graph::Graph() {
+    graph = std::vector<LinkedList*>();
 }
+
+// TO-DO: Implement breadthFirstSearch
+void Graph::breadthFirstSearch(const std::string& start) {}
+
+// TO-DO: Implement shortestPath
+void Graph::shortestPath(std::string start, std::string end) {}
