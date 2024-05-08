@@ -17,7 +17,7 @@ bool LinkedListUnitTest1() {
     list.addNode("D"); // Should be A -> B -> C -> D
     std::string expected = "A -> B -> C -> D";
     std::string actual = list.printLinkedList();
-    std::cout << "actual: " << actual << " || expected: " << expected << std::endl;
+    std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
     return expected == actual;
 }
 
@@ -27,7 +27,7 @@ bool LinkedListUnitTest2() {
     list.addNode("New York");
     std::string expected = "San Francisco -> Los Angeles -> New York";
     std::string actual = list.printLinkedList();
-    std::cout << "actual: \n" << actual << " || expected: " << expected << std::endl;
+    std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
     return expected == actual;
 }
 
@@ -41,10 +41,10 @@ bool GraphUnitTest1() {
     graph.addEdge("B", "C");
     graph.addEdge("B", "D");
     graph.addEdge("C", "D");
-    std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C";
+    std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C\n";
     std::string actual = graph.printGraph();
     std::cout << "actual: \n" << actual << std::endl;
-    std::cout << "expected: \n" << expected << std::endl;
+    std::cout << "expected: \n" << expected;
     return expected == actual;
 }
 
@@ -53,10 +53,10 @@ bool GraphUnitTest2() {
     graph.addEdge("San Francisco", "Los Angeles");
     graph.addEdge("San Francisco", "New York");
     graph.addEdge("Los Angeles", "New York");
-    std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles";
+    std::string expected = "san Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
     std::string actual = graph.printGraph();
     std::cout << "actual: \n" << actual << std::endl;
-    std::cout << "expected: \n" << expected << std::endl;
+    std::cout << "expected: \n" << expected;
     std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles", "New York"}, {"Los Angeles", "San Francisco", "New York"}, {"New York", "San Francisco", "Los Angeles"}};
     for (int i = 0; i < graph.graph.size(); i++) {
         LinkedList* list = graph.graph[i];
@@ -74,10 +74,11 @@ bool GraphUnitTest2() {
 }
 
 std::string result (UnitTestFunc func, const std::string& unitTestName) {
+    std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
     if (func()) {
-        return "Passed Unit Test " + unitTestName;
+        return "✅Passed Unit Test " + unitTestName;
     } else {
-        return "Failed Unit Test " + unitTestName;
+        return "❌ Failed Unit Test " + unitTestName;
     }
 }
 
