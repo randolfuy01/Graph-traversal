@@ -109,7 +109,7 @@ void LinkedList::addNode(std::string val) {
 }
 
 
-// TO-DO: Implement or fix
+// This function adds an edge between two vertices in the graph, creating new vertex lists if they don't already exist.
 void Graph::addEdge(const std::string& vertex1, const std::string& vertex2) {
     LinkedList* list1 = nullptr;
     LinkedList* list2 = nullptr;
@@ -137,6 +137,7 @@ void Graph::addEdge(const std::string& vertex1, const std::string& vertex2) {
     list2->addNode(vertex1);
 }
 
+// Prints graph
 std::string Graph::printGraph() const {
     std::string result;
     for (auto & i : graph) {
@@ -145,7 +146,7 @@ std::string Graph::printGraph() const {
     return result;
 }
 
-// TO-DO: Implement or fix
+// Destructor
 Graph::~Graph() {
     for (auto & i : graph) {
         delete i;
