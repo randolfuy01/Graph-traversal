@@ -7,14 +7,33 @@ LinkedList::LinkedList() {
     head = nullptr;
 }
 
-// Initialize the LinkedList with a head node
+// Param constructor - Initialize the LinkedList with a head node
 LinkedList::LinkedList(std::string val) {
     head = new Node();
     head -> val = std::move(val);
     head -> next = nullptr;
 }
 
-// TO-DO: Destructor for the LinkedList ** FIX ME IF WRONG
+// Copy constructor - create a deep copy
+LinkedList::LinkedList(const LinkedList &source) {
+    Node *temp = source.head;
+    if (temp == nullptr)
+        head = nullptr;
+    else {
+        head = new Node;
+        head->val = temp->val;
+        Node *newCopy = head;
+        while (temp->next) {
+            temp = temp->next;
+            newCopy->next = new Node;
+            newCopy = newCopy->next;
+            newCopy->val = temp->val;
+        }
+        newCopy->next = nullptr;
+    }
+}
+
+// Destructor for the LinkedList
 LinkedList::~LinkedList() {
     Node* current = head;
     while (current != nullptr) {
@@ -22,7 +41,43 @@ LinkedList::~LinkedList() {
         delete current;
         current = next;
     }
+    head = nullptr; // set head to nullptr to avoid the dangling pointer.
 }
+
+// Copy assignment operator
+LinkedList &LinkedList::operator=(const LinkedList &source) {
+    if (this == &source) {
+        return *this;
+    }
+
+    // First, deallocate any value that this instance currently holds
+    Node *current = head;
+    while (current != nullptr) {
+        Node *next = current->next;
+        delete current;
+        current = next;
+    }
+
+    // Then, copy values from source
+    Node *temp = source.head;
+    if (temp == nullptr) {
+        head = nullptr;
+    } else {
+        head = new Node;
+        head->val = temp->val;
+        Node *newCopy = head;
+        while (temp->next) {
+            temp = temp->next;
+            newCopy->next = new Node;
+            newCopy = newCopy->next;
+            newCopy->val = temp->val;
+        }
+        newCopy->next = nullptr;
+    }
+
+    return *this;
+}
+
 
 // Print the LinkedList ex. A -> B -> C -> D
 std::string LinkedList::printLinkedList() const {
@@ -37,16 +92,22 @@ std::string LinkedList::printLinkedList() const {
 }
 
 // Add a node to the LinkedList
-void LinkedList::addNode(std::string val) const {
-    Node* current = head;
-    while (current->next != nullptr) {
-        current = current->next;
-    }
+void LinkedList::addNode(std::string val) {
     Node* newNode = new Node();
     newNode -> val = std::move(val);
     newNode -> next = nullptr;
-    current -> next = newNode;
+
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        current -> next = newNode;
+    }
 }
+
 
 // TO-DO: Implement or fix
 void Graph::addEdge(const std::string& vertex1, const std::string& vertex2) {
