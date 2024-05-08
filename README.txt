@@ -1,13 +1,14 @@
 Review these slides first. The last slide lists the requirements of this project, copied below for your reference:
 
-Declare a class Graph
-Adopt the adjacency list representation
-Represent each adjacency list as a “raw pointer”-based singly linked list
-Include and implement the big-3
-Member functions to construct a graph such as adding vertices and edges
-Implement the BFS algorithm on Slide 7
-Print out the BFS-tree from a given source vertex
-Print the shortest path from s to v by implement the recursive algorithm on Slide 10
+- [x] Declare a class Graph
+- [x] Adopt the adjacency list representation
+- [x] Represent each adjacency list as a “raw pointer”-based singly linked list
+- [ ] Include and implement the big-3
+- [x] Member functions to construct a graph such as adding vertices and edges
+- [ ] Implement the BFS algorithm on Slide 7
+- [ ] Print out the BFS-tree from a given source vertex
+- [ ] Print the shortest path from s to v by implement the recursive algorithm on Slide 10
+
 Submission:
 
 Submit one PDF that consists of the following files in their specified order. Please remember to properly delimit different program files by starting from a new page.
