@@ -9,9 +9,9 @@ Review these slides first. The last slide lists the requirements of this project
       - [x] Copy Constructor
       - [x] Copy Assignment Operator
    - [ ] Graph
-      - [ ] Destructor
-      - [ ] Copy Constructor
-      - [ ] Copy Assignment Operator
+      - [x] Destructor
+      - [x] Copy Constructor
+      - [x] Copy Assignment Operator
 - [x] Member functions to construct a graph such as adding vertices and edges
 - [ ] Implement the BFS algorithm on Slide 7
 - [ ] Print out the BFS-tree from a given source vertex

@@ -131,6 +131,23 @@ std::string result (UnitTestFunc func, const std::string& unitTestName) {
     }
 }
 
+bool GraphCopyAssignmentOperatorTest1() {
+    Graph originalGraph;
+    originalGraph.addEdge("A", "B");
+    originalGraph.addEdge("A", "C");
+    originalGraph.addEdge("B", "D");
+    originalGraph.addEdge("C", "D");
+
+    // Create an empty graph for assignment
+    Graph copiedGraph;
+
+    // Create a copy of the original graph
+    copiedGraph = originalGraph;
+
+    // Check if the original graph matches the copied graph
+    return (originalGraph.printGraph() == copiedGraph.printGraph());
+}
+
 void runLinkedListUnitTests() {
     std::cout << result(LinkedListUnitTest1, "LinkedListUnitTest1") << std::endl;
     std::cout << result(LinkedListUnitTest2, "LinkedListUnitTest2") << std::endl;
@@ -139,5 +156,6 @@ void runLinkedListUnitTests() {
     std::cout << result(GraphUnitTest1, "GraphUnitTest1") << std::endl;
     std::cout << result(GraphUnitTest2, "GraphUnitTest2") << std::endl;
     std::cout << result(GraphCopyConstructorTest1, "GraphCopyConstructorTest1") << std::endl;
+    std::cout << result(GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1") << std::endl;
 }
 #endif //PROJECT5_UNITTESTS_H

@@ -164,6 +164,28 @@ Graph::Graph(const Graph &source) {
     }
 }
 
+// Copy assignment operator
+Graph &Graph::operator=(const Graph &source) {
+    if (this == &source) {
+        return *this;
+    }
+
+    // Clean up existing resources
+    for(auto &i : graph) {
+        delete i;
+    }
+    graph.clear();
+
+    // Copy LinkedList from source
+    for(auto &i : source.graph) {
+        LinkedList *temp = new LinkedList(*i);
+        graph.push_back(temp);
+    }
+
+    return *this;
+}
+
+
 // TO-DO: Implement breadthFirstSearch
 void Graph::breadthFirstSearch(const std::string& start) {}
 
