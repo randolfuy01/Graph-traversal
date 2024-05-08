@@ -18,13 +18,23 @@ public:
 
     Node* head{};
 
+    // Constructors
+
     LinkedList();
 
     explicit LinkedList(std::string val);
 
+    // Big 3
+
+    LinkedList(const LinkedList &source);
+
     virtual ~LinkedList();
 
-    void addNode(std::string val) const;
+    LinkedList& operator=(const LinkedList &source);
+
+    // Member Functions
+
+    void addNode(std::string val);
 
     std::string printLinkedList() const;
 
