@@ -31,6 +31,40 @@ bool LinkedListUnitTest2() {
     return expected == actual;
 }
 
+bool testLinkedListCopyConstructor() {
+    LinkedList list1;
+    list1.addNode("Hello");
+    list1.addNode("World");
+
+    // Create a copy using the copy constructor
+    LinkedList list2(list1);
+
+    // Modify list1
+    list1.addNode("New Node");
+
+    // Check that list2 didn't change after changing list1
+    bool isCopyConstructorPassing = (list2.printLinkedList() == "Hello -> World");
+
+    return isCopyConstructorPassing;
+}
+
+bool testLinkedListCopyAssignmentOperator() {
+    LinkedList list1;
+    list1.addNode("Hello");
+    list1.addNode("World");
+
+    // Create an empty list and then assign to it to make a copy.
+    LinkedList list2;
+    list2 = list1;
+
+    // Modify list1
+    list1.addNode("New Node");
+
+    // Check that list2 didn't change after changing list1
+    bool isCopyAssignmentPassing = (list2.printLinkedList() == "Hello -> World");
+
+    return isCopyAssignmentPassing;
+}
 
 // TO-DO: Implement Graph Unit Tests
 bool GraphUnitTest1() {
@@ -53,7 +87,7 @@ bool GraphUnitTest2() {
     graph.addEdge("San Francisco", "Los Angeles");
     graph.addEdge("San Francisco", "New York");
     graph.addEdge("Los Angeles", "New York");
-    std::string expected = "san Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
+    std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
     std::string actual = graph.printGraph();
     std::cout << "actual: \n" << actual << std::endl;
     std::cout << "expected: \n" << expected;
@@ -85,6 +119,8 @@ std::string result (UnitTestFunc func, const std::string& unitTestName) {
 void runLinkedListUnitTests() {
     std::cout << result(LinkedListUnitTest1, "LinkedListUnitTest1") << std::endl;
     std::cout << result(LinkedListUnitTest2, "LinkedListUnitTest2") << std::endl;
+    std::cout << result(testLinkedListCopyConstructor, "testLinkedListCopyConstructor") << std::endl;
+    std::cout << result(testLinkedListCopyAssignmentOperator, "testLinkedListCopyAssignmentOperator") << std::endl;
     std::cout << result(GraphUnitTest1, "GraphUnitTest1") << std::endl;
     std::cout << result(GraphUnitTest2, "GraphUnitTest2") << std::endl;
 }
