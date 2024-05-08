@@ -48,6 +48,10 @@ public:
 
     Graph();
 
+    Graph(const Graph &source);
+
+    Graph& operator=(const Graph &source);
+
     virtual ~Graph();
 
     void addEdge(const std::string& vertex1, const std::string& vertex2);

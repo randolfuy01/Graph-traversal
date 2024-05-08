@@ -156,8 +156,18 @@ Graph::Graph() {
     graph = std::vector<LinkedList*>();
 }
 
+// Copy constructor - create a deep copy
+Graph::Graph(const Graph &source) {
+    for (auto &i: source.graph) {
+        LinkedList *temp = new LinkedList(*i);
+        graph.push_back(temp);
+    }
+}
+
 // TO-DO: Implement breadthFirstSearch
 void Graph::breadthFirstSearch(const std::string& start) {}
 
 // TO-DO: Implement shortestPath
 void Graph::shortestPath(std::string start, std::string end) {}
+
+
