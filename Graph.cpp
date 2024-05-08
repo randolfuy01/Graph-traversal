@@ -2,6 +2,10 @@
 
 #include <utility>
 
+// Default constructor
+LinkedList::LinkedList() {
+    head = nullptr;
+}
 
 // Initialize the LinkedList with a head node
 LinkedList::LinkedList(std::string val) {
@@ -43,7 +47,6 @@ void LinkedList::addNode(std::string val) const {
     newNode -> next = nullptr;
     current -> next = newNode;
 }
-
 
 // TO-DO: Implement or fix
 void Graph::addEdge(const std::string& vertex1, const std::string& vertex2) {

@@ -4,14 +4,14 @@
 #include <queue>
 #include <vector>
 
-// Node struct points to the previous and next node
+// Node struct points to the next node
 struct Node {
     Node* next;
     std::string val;
     int distance = 0;
 };
 
-// Double Linked List implementation for the Graph
+// Singly Linked List implementation for the Graph
 class LinkedList {
 
 public:
@@ -20,7 +20,7 @@ public:
 
     LinkedList();
 
-    LinkedList(std::string val);
+    explicit LinkedList(std::string val);
 
     virtual ~LinkedList();
 
