@@ -3,12 +3,12 @@ Review these slides first. The last slide lists the requirements of this project
 - [x] Declare a class Graph
 - [x] Adopt the adjacency list representation
 - [x] Represent each adjacency list as a “raw pointer”-based singly linked list
-- [ ] Include and implement the big-3
+- [x] Include and implement the big-3
    - [x] LinkedList
       - [x] Destructor
       - [x] Copy Constructor
       - [x] Copy Assignment Operator
-   - [ ] Graph
+   - [x] Graph
       - [x] Destructor
       - [x] Copy Constructor
       - [x] Copy Assignment Operator
