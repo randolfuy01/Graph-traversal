@@ -163,12 +163,19 @@ class UnitTest {
         graph.breadthFirstSearch("A");
         graph.printBFSTree();
 
+        // Verify that the BFS has correctly assigned parents in the BFS tree starting from node 'A'
+        if (graph.findVertex("B")->parent != graph.findVertex("A")) return false;
+        if (graph.findVertex("C")->parent != graph.findVertex("A")) return false;
+        if (graph.findVertex("D")->parent != graph.findVertex("B")) return false;
+        if (graph.findVertex("E")->parent != graph.findVertex("B")) return false;
+        if (graph.findVertex("F")->parent != graph.findVertex("C")) return false;
 
-        return false;
+        return true;
     }
 
     static bool GraphBFSUnitTest2() {
         Graph graph;
+
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -181,11 +188,17 @@ class UnitTest {
         graph.addEdge("B", "E");
         graph.addEdge("C", "F");
 
-        // Start BFS at node C
         graph.breadthFirstSearch("C");
         graph.printBFSTree();
 
-        return false;
+        // Verify that the BFS has correctly assigned parents in the BFS tree starting from node 'C'
+        if (graph.findVertex("A")->parent != graph.findVertex("C")) return false;
+        if (graph.findVertex("F")->parent != graph.findVertex("C")) return false;
+        if (graph.findVertex("B")->parent != graph.findVertex("A")) return false;
+        if (graph.findVertex("D")->parent != graph.findVertex("B")) return false;
+        if (graph.findVertex("E")->parent != graph.findVertex("B")) return false;
+
+        return true;
     }
 
 // Path found
