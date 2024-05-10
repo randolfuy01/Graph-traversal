@@ -103,18 +103,18 @@ void LinkedList::enqueue(Node* newNode) {
 }
 
 // Dequeue the front node of the LinkedList
-Node LinkedList::dequeue() {
+Node* LinkedList::dequeue() {
     Node* current = head;
     Node* previous = nullptr;
 
     // If the LinkedList is empty, return nullptr
     if (head == nullptr) {
-        return Node();
+        return nullptr;
     }
 
     Node* temp = head;
     head = head->next;
-    return *temp;
+    return temp;
 }
 
 Node* LinkedList::createNode(std::string val) {
@@ -237,7 +237,34 @@ Graph &Graph::operator=(const Graph &source) {
     return *this;
 }
 
-// TO-DO: Implement breadthFirstSearch
+// Find a vertex in the vertices list
+Node* Graph::findVertex(Node* vertex) const {
+    return findVertex(vertex->val);
+}
+
+Node* Graph::findVertex(const std::string& vertex) const {
+    for (auto & i : vertices) {
+        if (i->val == vertex) {
+            return i;
+        }
+    }
+    return nullptr;
+}
+
+// Find the LinkedList that contains the edges for a given vertex
+LinkedList* Graph::findEdge(Node* vertex) const {
+    return findEdge(vertex->val);
+}
+
+LinkedList* Graph::findEdge(const std::string& vertex) const {
+    for (auto & i : edges) {
+        if (i->head->val == vertex) {
+            return i;
+        }
+    }
+    return nullptr;
+}
+
 void Graph::breadthFirstSearch(const std::string& start) {
     // Initialize all vertices to white
     for (auto & i : vertices) {
@@ -266,65 +293,68 @@ void Graph::breadthFirstSearch(const std::string& start) {
     startNode->distance = 0;
     startNode->parent = nullptr;
 
-    // Create a queue
+    // Create a LinkedList to act as a queue
     LinkedList queue;
     queue.enqueue(startNode);
 
     // While the queue is not empty
     while (queue.head != nullptr) {
-        Node u = queue.dequeue();
+        Node* nextInQueue = queue.dequeue(); // Dequeue the front node and get the next node
 
-        // For each vertex adjacent to u
-        for (auto & i : edges) {
-            if (i->head->val == u.val) {
-                Node* v = i->head->next;
-                while (v != nullptr) {
-                    if (v->color == "white") {
-                        v->color = "gray";
-                        v->distance = u.distance + 1;
-                        v->parent = &u;
-                        queue.enqueue(v);
-                    }
-                    v = v->next;
-                }
+        // For each vertex adjacent to nextInQueue
+        LinkedList* currentEdge = findEdge(nextInQueue->val);
+        Node* currentChild = currentEdge->head->next;
+
+        while (currentChild != nullptr) {
+            Node* currentVertex = findVertex(currentChild->val);
+
+            if (currentVertex->color == "white") { // Check if the vertex has not been visited
+                currentVertex->color = "gray";
+                currentVertex->distance = nextInQueue->distance + 1;
+                currentVertex->parent = nextInQueue;
+                queue.enqueue(currentVertex);
             }
+
+            currentChild = currentChild->next;
         }
-        u.color = "black";
+
+        nextInQueue->color = "black"; // Mark the vertex as visited after processing its neighbors
     }
 
     printBFSTree();
 }
 
-// Print the BFS tree in a file structure diagram
 void Graph::printBFSTree() const {
+    Node* parent = nullptr;
     for (auto & i : vertices) {
         if (i->parent == nullptr) {
-            std::cout << i->val << std::endl;
-            printBFSTreeHelper(i, 1);
+            printBFSTreeHelper(i, 0);
         }
     }
 }
 
-// Helper function to recursively print the BFS tree
 void Graph::printBFSTreeHelper(Node* node, int level) const {
-    for (int i = 0; i < level; i++) {
-        std::cout << "  ";
+    if (node == nullptr) {
+        return;
     }
-    std::cout << "|- " << node->val << std::endl;
-    for (auto & i : edges) {
-        if (i->head->val == node->val) {
-            Node* child = i->head->next;
-            while (child != nullptr) {
-                printBFSTreeHelper(child, level + 1);
-                child = child->next;
-            }
+
+    for (int i = 0; i < level; i++) {
+        std::cout << "   ";
+    }
+
+    std::cout << (level == 0 ? "   " : "|- ") << node->val << ": " << node->distance << std::endl;
+
+    for (auto & i : vertices) {
+        if (i->parent == node) {
+            printBFSTreeHelper(i, level + 1);
         }
     }
 }
 
-// TO-DO: Implement shortestPath
-void Graph::shortestPath(std::string start, std::string end) {
+std::string Graph::shortestPath(std::string start, std::string end) {
     breadthFirstSearch(start);
+
+    std::string result = "";
 
     Node* startNode = nullptr;
     Node* endNode = nullptr;
@@ -340,20 +370,22 @@ void Graph::shortestPath(std::string start, std::string end) {
 
     if (startNode == nullptr || endNode == nullptr) {
         std::cout << "Vertex not found" << std::endl;
-        return;
+        return result;
     }
 
     if (endNode->parent == nullptr) {
         std::cout << "No path from " << start << " to " << end << std::endl;
     } else {
-        std::cout << "Shortest path from " << start << " to " << end << ": ";
+        result = "Shortest path from " + start + " to " + end + ": ";
         Node* current = endNode;
         while (current != nullptr) {
-            std::cout << current->val << " ";
+            result += current->val + " ";
             current = current->parent;
         }
-        std::cout << std::endl;
+        std::cout << result << std::endl;
     }
+
+    return result;
 }
 
 

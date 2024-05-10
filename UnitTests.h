@@ -154,15 +154,34 @@ bool GraphBFSUnitTest1() {
     graph.addEdge("A", "B");
     graph.addEdge("A", "C");
     graph.addEdge("B", "D");
-    graph.addEdge("C", "D");
-    graph.addEdge("D", "E");
-    graph.addEdge("E", "F");
-    graph.addEdge("F", "G");
+    graph.addEdge("B", "G");
+    graph.addEdge("C", "H");
+    graph.addEdge("C", "I");
+    graph.addEdge("C", "J");
+    graph.addEdge("J", "K");
 
     std::string expected = "A -> B -> C -> D -> E -> F -> G";
     std::string actual;
     
+    std::cout << graph.printGraph() << std::endl;
     graph.breadthFirstSearch("A");
+
+    return expected == actual;
+}
+
+bool GraphShortestPathUnitTest1() {
+    Graph graph;
+    graph.addEdge("A", "B");
+    graph.addEdge("A", "C");
+    graph.addEdge("B", "D");
+    graph.addEdge("B", "G");
+    graph.addEdge("C", "H");
+    graph.addEdge("C", "I");
+    graph.addEdge("C", "J");
+    graph.addEdge("J", "K");
+
+    std::string expected = "Shortest path from A to G: G B A";
+    std::string actual = graph.shortestPath("A", "G");
 
     return expected == actual;
 }
@@ -177,5 +196,8 @@ void runLinkedListUnitTests() {
     std::cout << result(GraphCopyConstructorTest1, "GraphCopyConstructorTest1") << std::endl;
     std::cout << result(GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1") << std::endl;
     GraphBFSUnitTest1();
+    std::cout << result(GraphShortestPathUnitTest1, "GraphShortestPathUnitTest1") << std::endl;
+    std::cout << "Done" << std::endl;
 }
+
 #endif //PROJECT5_UNITTESTS_H

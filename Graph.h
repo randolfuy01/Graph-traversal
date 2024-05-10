@@ -3,10 +3,11 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <set>
 
 // Node struct points to the next node
 struct Node {
-    Node* next;
+    Node* next = nullptr;
     std::string val;
     std::string color = "white";
     Node* parent = nullptr;
@@ -16,7 +17,7 @@ struct Node {
 // Singly Linked List implementation for the Graph
 class LinkedList {
 private:
-    
+
     Node* createNode(std::string val);
 
 public:
@@ -38,7 +39,7 @@ public:
 
     void enqueue(std::string val);
     void enqueue(Node* newNode);
-    Node dequeue();
+    Node* dequeue();
 
     std::string printLinkedList() const;
 
@@ -46,6 +47,13 @@ public:
 
 // Graph class that inherits from LinkedList
 class Graph {
+private:
+
+    Node* findVertex(const std::string& vertex) const;
+    Node* findVertex(Node* vertex) const;
+    LinkedList* findEdge(const std::string& vertex) const;
+    LinkedList* findEdge(Node* vertex) const;
+
 public:
 
     std::vector<LinkedList*> edges{};
@@ -61,12 +69,12 @@ public:
     void addVertex(const std::string& vertex);
 
     void breadthFirstSearch(const std::string& start);
-
-    void shortestPath(std::string start, std::string end);
-
-    std::string printGraph() const;
     void printBFSTree() const;
     void printBFSTreeHelper(Node* node, int level) const;
+
+    std::string shortestPath(std::string start, std::string end);
+
+    std::string printGraph() const;
 
 };
 #endif
