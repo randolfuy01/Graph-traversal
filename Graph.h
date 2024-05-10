@@ -11,7 +11,7 @@ struct Node {
     std::string val;
     std::string color = "white";
     Node* parent = nullptr;
-    int distance = 9999;
+    int distance = -1; // signifies unvisited or unreachable node
 };
 
 // Singly Linked List implementation for the Graph

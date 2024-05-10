@@ -204,8 +204,11 @@ bool GraphShortestPathUnitTest1() {
     graph.addEdge("C", "J");
     graph.addEdge("J", "K");
 
-    std::string expected = "Shortest path from A to G: A B G";
-    std::string actual = graph.shortestPath("A", "G");
+    std::string expected = "Shortest path from A to I: A C I";
+    std::string actual = graph.shortestPath("A", "I");
+
+    graph.printBFSTree();
+    std::cout << "start: A, end; I" << std::endl;
 
     std::cout << "expected: " << expected << std::endl;
     std::cout << "actual  : " << actual << std::endl;
@@ -221,14 +224,15 @@ bool GraphShortestPathUnitTest2() {
     graph.addEdge("B", "D");
     graph.addEdge("D", "E");
 
-
     std::string expected = "Start vertex not found";
     std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
+
+    graph.printBFSTree();
+    std::cout << "start: X, end; B" << std::endl;
 
     std::cout << "expected: " << expected << std::endl;
     std::cout << "actual  : " << actual << std::endl;
 
-    // Verify if the function returns the correct error message
     return expected == actual;
 }
 
@@ -242,6 +246,9 @@ bool GraphShortestPathUnitTest3() {
 
     std::string expected = "End vertex not found";
     std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
+
+    graph.printBFSTree();
+    std::cout << "start: A, end; I" << std::endl;
 
     std::cout << "expected: " << expected << std::endl;
     std::cout << "actual  : " << actual << std::endl;
@@ -261,6 +268,9 @@ bool GraphShortestPathUnitTest4() {
 
     std::string expected = "No path from A to Z";
     std::string actual = graph.shortestPath("A", "Z");
+
+    graph.printBFSTree();
+    std::cout << "start: A, end; Z" << std::endl;
 
     std::cout << "expected: " << expected << std::endl;
     std::cout << "actual  : " << actual << std::endl;

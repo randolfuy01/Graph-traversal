@@ -266,13 +266,6 @@ LinkedList* Graph::findEdge(const std::string& vertex) const {
 }
 
 void Graph::breadthFirstSearch(const std::string& start) {
-    // Initialize all vertices to white
-    for (auto & i : vertices) {
-        i->color = "white";
-        i->distance = 9999;
-        i->parent = nullptr;
-    }
-
     // Find the starting vertex
     Node* startNode = nullptr;
     for (auto & i : vertices) {
@@ -286,6 +279,13 @@ void Graph::breadthFirstSearch(const std::string& start) {
     if (startNode == nullptr) {
         //std::cout << "Vertex not found" << std::endl;
         return;
+    }
+
+    // Initialize all vertices to white
+    for (auto & i : vertices) {
+        i->color = "white";
+        i->distance = 9999;
+        i->parent = nullptr;
     }
 
     // Initialize the starting vertex
