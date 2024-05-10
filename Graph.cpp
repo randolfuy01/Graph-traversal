@@ -2,6 +2,8 @@
 
 #include <utility>
 
+class UnitTest;
+
 // START OF LINKED LIST CLASS
 
 // Default constructor
@@ -265,53 +267,48 @@ LinkedList* Graph::findEdge(const std::string& vertex) const {
     return nullptr;
 }
 
-void Graph::breadthFirstSearch(const std::string& start) {
+void Graph::processNode(Node* node, LinkedList& queue) {
+    node->color = "black";  // Mark as processed to prevent re-enqueue
+    LinkedList* adjacencyList = findEdge(node->val);
+
+    // Update distances and enqueue unvisited vertices for BFS traversal
+    for (Node* adjacentNode = adjacencyList->head->next; adjacentNode != nullptr; adjacentNode = adjacentNode->next) {
+        Node* adjacentVertex = findVertex(adjacentNode->val);
+        if (adjacentVertex->color == "white") {
+            adjacentVertex->color = "gray";
+            adjacentVertex->distance = node->distance + 1;
+            adjacentVertex->parent = node;
+            queue.enqueue(adjacentVertex);
+        }
+    }
+}
+
+void Graph::breadthFirstSearch(const std::string &start) {
     // Find the starting vertex
-    Node* startNode = findVertex(start);
+    Node *startNode = findVertex(start);
 
     // If the starting vertex is not found, return
     if (startNode == nullptr) {
         throw std::runtime_error("Error: Start vertex '" + start + "' not found");
     }
 
-    // Initialize all vertices to white
-    for (auto & i : vertices) {
-        i->color = "white";
-        i->distance = 9999;
-        i->parent = nullptr;
+    // Reset all nodes to initial state before BFS traversal
+    for (auto &vertex: vertices) {
+        vertex->color = "white";
+        vertex->distance = INT_MAX;
+        vertex->parent = nullptr;
     }
 
-    // Initialize the starting vertex
+    // Initialize the BFS queue with the start node and set its initial state.
+    LinkedList bfsQueue;
+    bfsQueue.enqueue(startNode);
     startNode->color = "gray";
     startNode->distance = 0;
-    startNode->parent = nullptr;
 
-    // Create a LinkedList to act as a queue
-    LinkedList queue;
-    queue.enqueue(startNode);
-
-    // While the queue is not empty
-    while (queue.head != nullptr) {
-        Node* nextInQueue = queue.dequeue(); // Dequeue the front node and get the next node
-
-        // For each vertex adjacent to nextInQueue
-        LinkedList* currentEdge = findEdge(nextInQueue->val);
-        Node* currentChild = currentEdge->head->next;
-
-        while (currentChild != nullptr) {
-            Node* currentVertex = findVertex(currentChild->val);
-
-            if (currentVertex->color == "white") { // Check if the vertex has not been visited
-                currentVertex->color = "gray";
-                currentVertex->distance = nextInQueue->distance + 1;
-                currentVertex->parent = nextInQueue;
-                queue.enqueue(currentVertex);
-            }
-
-            currentChild = currentChild->next;
-        }
-
-        nextInQueue->color = "black"; // Mark the vertex as visited after processing its neighbors
+    // Dequeue nodes from the BFS queue and process them until the queue is empty.
+    while (bfsQueue.head != nullptr) {
+        Node *current = bfsQueue.dequeue();
+        processNode(current, bfsQueue);
     }
 
 }

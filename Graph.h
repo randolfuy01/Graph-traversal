@@ -4,6 +4,7 @@
 #include <queue>
 #include <vector>
 #include <set>
+#include <climits>  // For INT_MAX
 
 // Node struct points to the next node
 struct Node {
@@ -11,7 +12,7 @@ struct Node {
     std::string val;
     std::string color = "white";
     Node* parent = nullptr;
-    int distance = -1; // signifies unvisited or unreachable node
+    int distance = INT_MAX; // signifies unvisited or unreachable node
 };
 
 // Singly Linked List implementation for the Graph
@@ -48,33 +49,33 @@ public:
 // Graph class that inherits from LinkedList
 class Graph {
 private:
+    friend class UnitTest;
 
     Node* findVertex(const std::string& vertex) const;
     Node* findVertex(Node* vertex) const;
     LinkedList* findEdge(const std::string& vertex) const;
     LinkedList* findEdge(Node* vertex) const;
 
-public:
-
     std::vector<LinkedList*> edges{};
     std::vector<Node*> vertices{};
 
+public:
+
     Graph();
-
     Graph(const Graph &source);
-    Graph& operator=(const Graph &source);
     virtual ~Graph();
+    Graph& operator=(const Graph &source);
 
-    void addEdge(const std::string& vertex1, const std::string& vertex2);
-    void addVertex(const std::string& vertex);
+    void addEdge(const std::string &vertex1, const std::string &vertex2);
+    void addVertex(const std::string &vertex);
 
-    void breadthFirstSearch(const std::string& start);
-    void printBFSTree() const;
-    void printBFSTreeHelper(Node* node, int level) const;
-
-    std::string shortestPath(const std::string& start, const std::string& end);
+    void breadthFirstSearch(const std::string &start);
+    std::string shortestPath(const std::string &start, const std::string &end);
+    void processNode(Node *node, LinkedList &queue);
 
     std::string printGraph() const;
+    void printBFSTree() const;
+    void printBFSTreeHelper(Node *node, int level) const;
 
 };
 #endif

@@ -9,291 +9,317 @@
 #include <sstream>
 #include "Graph.h"
 
-typedef bool (*UnitTestFunc)();
+class UnitTest {
 
-bool LinkedListUnitTest1() {
-    LinkedList list = *new LinkedList("A");
-    list.enqueue("B");
-    list.enqueue("C");
-    list.enqueue("D"); // Should be A -> B -> C -> D
-    std::string expected = "A -> B -> C -> D";
-    std::string actual = list.printLinkedList();
-    std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
-    return expected == actual;
-}
+    typedef bool (*UnitTestFunc)();
 
-bool LinkedListUnitTest2() {
-    LinkedList list = *new LinkedList("San Francisco");
-    list.enqueue("Los Angeles");
-    list.enqueue("New York");
-    std::string expected = "San Francisco -> Los Angeles -> New York";
-    std::string actual = list.printLinkedList();
-    std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
-    return expected == actual;
-}
+    static bool LinkedListUnitTest1() {
+        LinkedList list = *new LinkedList("A");
+        list.enqueue("B");
+        list.enqueue("C");
+        list.enqueue("D"); // Should be A -> B -> C -> D
+        std::string expected = "A -> B -> C -> D";
+        std::string actual = list.printLinkedList();
+        std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
+        return expected == actual;
+    }
 
-bool LinkedListCopyConstructorTest1() {
-    LinkedList list1;
-    list1.enqueue("Hello");
-    list1.enqueue("World");
+    static bool LinkedListUnitTest2() {
+        LinkedList list = *new LinkedList("San Francisco");
+        list.enqueue("Los Angeles");
+        list.enqueue("New York");
+        std::string expected = "San Francisco -> Los Angeles -> New York";
+        std::string actual = list.printLinkedList();
+        std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
+        return expected == actual;
+    }
 
-    // Create a copy using the copy constructor
-    LinkedList list2(list1);
+    static bool LinkedListCopyConstructorTest1() {
+        LinkedList list1;
+        list1.enqueue("Hello");
+        list1.enqueue("World");
 
-    // Modify list1
-    list1.enqueue("New Node");
+        // Create a copy using the copy constructor
+        LinkedList list2(list1);
 
-    // Check that list2 didn't change after changing list1
-    bool isCopyConstructorPassing = (list2.printLinkedList() == "Hello -> World");
+        // Modify list1
+        list1.enqueue("New Node");
 
-    return isCopyConstructorPassing;
-}
+        // Check that list2 didn't change after changing list1
+        bool isCopyConstructorPassing = (list2.printLinkedList() == "Hello -> World");
 
-bool LinkedListCopyAssignmentOperatorTest1() {
-    LinkedList list1;
-    list1.enqueue("Hello");
-    list1.enqueue("World");
+        return isCopyConstructorPassing;
+    }
 
-    // Create an empty list and then assign to it to make a copy.
-    LinkedList list2;
-    list2 = list1;
+    static bool LinkedListCopyAssignmentOperatorTest1() {
+        LinkedList list1;
+        list1.enqueue("Hello");
+        list1.enqueue("World");
 
-    // Modify list1
-    list1.enqueue("New Node");
+        // Create an empty list and then assign to it to make a copy.
+        LinkedList list2;
+        list2 = list1;
 
-    // Check that list2 didn't change after changing list1
-    bool isCopyAssignmentPassing = (list2.printLinkedList() == "Hello -> World");
+        // Modify list1
+        list1.enqueue("New Node");
 
-    return isCopyAssignmentPassing;
-}
+        // Check that list2 didn't change after changing list1
+        bool isCopyAssignmentPassing = (list2.printLinkedList() == "Hello -> World");
+
+        return isCopyAssignmentPassing;
+    }
 
 // TO-DO: Implement Graph Unit Tests
-bool GraphUnitTest1() {
-    Graph graph = *new Graph();
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("A", "D");
-    graph.addEdge("B", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("C", "D");
-    std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C\n";
-    std::string actual = graph.printGraph();
-    std::cout << "actual: \n" << actual << std::endl;
-    std::cout << "expected: \n" << expected;
-    return expected == actual;
-}
+    static bool GraphUnitTest1() {
+        Graph graph = *new Graph();
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("A", "D");
+        graph.addEdge("B", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("C", "D");
+        std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C\n";
+        std::string actual = graph.printGraph();
+        std::cout << "actual: \n" << actual << std::endl;
+        std::cout << "expected: \n" << expected;
+        return expected == actual;
+    }
 
-bool GraphUnitTest2() {
-    Graph graph = *new Graph();
-    graph.addEdge("San Francisco", "Los Angeles");
-    graph.addEdge("San Francisco", "New York");
-    graph.addEdge("Los Angeles", "New York");
-    std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
-    std::string actual = graph.printGraph();
-    std::cout << "actual: \n" << actual << std::endl;
-    std::cout << "expected: \n" << expected;
-    std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles", "New York"}, {"Los Angeles", "San Francisco", "New York"}, {"New York", "San Francisco", "Los Angeles"}};
-    for (int i = 0; i < graph.edges.size(); i++) {
-        LinkedList* list = graph.edges[i];
-        Node* current = list->head;
-        int j = 0;
-        while (current->next != nullptr) {
-            if (current->val != expectedValues[i][j]) {
-                return false;
+    static bool GraphUnitTest2() {
+        Graph graph = *new Graph();
+        graph.addEdge("San Francisco", "Los Angeles");
+        graph.addEdge("San Francisco", "New York");
+        graph.addEdge("Los Angeles", "New York");
+        std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
+        std::string actual = graph.printGraph();
+        std::cout << "actual: \n" << actual << std::endl;
+        std::cout << "expected: \n" << expected;
+        std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles",   "New York"},
+                                                                {"Los Angeles",   "San Francisco", "New York"},
+                                                                {"New York",      "San Francisco", "Los Angeles"}};
+
+        for (int i = 0; i < graph.edges.size(); i++) {
+            LinkedList *list = graph.edges[i];
+            Node *current = list->head;
+            int j = 0;
+            while (current->next != nullptr) {
+                if (current->val != expectedValues[i][j]) {
+                    return false;
+                }
+                current = current->next;
+                j++;
             }
-            current = current->next;
-            j++;
+        }
+        return expected == actual;
+    }
+
+    static bool GraphCopyConstructorTest1() {
+        Graph originalGraph;
+
+        originalGraph.addEdge("A", "B");
+        originalGraph.addEdge("A", "C");
+        originalGraph.addEdge("B", "D");
+        originalGraph.addEdge("C", "D");
+
+        // Make a copy of the original graph
+        Graph copiedGraph = originalGraph; // Calls the copy constructor
+
+        // Check if the printed representations of the original and copied graph are same
+        return (originalGraph.printGraph() == copiedGraph.printGraph());
+    }
+
+    std::string result(UnitTestFunc func, const std::string &unitTestName) {
+        std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
+        if (func()) {
+            return "✅Passed Unit Test " + unitTestName;
+        } else {
+            return "❌ Failed Unit Test " + unitTestName;
         }
     }
-    return expected == actual;
-}
 
-bool GraphCopyConstructorTest1() {
-    Graph originalGraph;
+    static bool GraphCopyAssignmentOperatorTest1() {
+        Graph originalGraph;
+        originalGraph.addEdge("A", "B");
+        originalGraph.addEdge("A", "C");
+        originalGraph.addEdge("B", "D");
+        originalGraph.addEdge("C", "D");
 
-    originalGraph.addEdge("A", "B");
-    originalGraph.addEdge("A", "C");
-    originalGraph.addEdge("B", "D");
-    originalGraph.addEdge("C", "D");
+        // Create an empty graph for assignment
+        Graph copiedGraph;
 
-    // Make a copy of the original graph
-    Graph copiedGraph = originalGraph; // Calls the copy constructor
+        // Create a copy of the original graph
+        copiedGraph = originalGraph;
 
-    // Check if the printed representations of the original and copied graph are same
-    return (originalGraph.printGraph() == copiedGraph.printGraph());
-}
-
-std::string result (UnitTestFunc func, const std::string& unitTestName) {
-    std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
-    if (func()) {
-        return "✅Passed Unit Test " + unitTestName;
-    } else {
-        return "❌ Failed Unit Test " + unitTestName;
+        // Check if the original graph matches the copied graph
+        return (originalGraph.printGraph() == copiedGraph.printGraph());
     }
-}
 
-bool GraphCopyAssignmentOperatorTest1() {
-    Graph originalGraph;
-    originalGraph.addEdge("A", "B");
-    originalGraph.addEdge("A", "C");
-    originalGraph.addEdge("B", "D");
-    originalGraph.addEdge("C", "D");
+    static bool GraphBFSUnitTest1() {
+        Graph graph;
 
-    // Create an empty graph for assignment
-    Graph copiedGraph;
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+        graph.addVertex("F");
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("B", "E");
+        graph.addEdge("C", "F");
 
-    // Create a copy of the original graph
-    copiedGraph = originalGraph;
-
-    // Check if the original graph matches the copied graph
-    return (originalGraph.printGraph() == copiedGraph.printGraph());
-}
-
-bool GraphBFSUnitTest1() {
-    Graph graph;
-
-    graph.addVertex("A");
-    graph.addVertex("B");
-    graph.addVertex("C");
-    graph.addVertex("D");
-    graph.addVertex("E");
-    graph.addVertex("F");
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("B", "E");
-    graph.addEdge("C", "F");
-
-    graph.breadthFirstSearch("A");
-    graph.printBFSTree();
+        graph.breadthFirstSearch("A");
+        graph.printBFSTree();
 
 
-    return false;
-}
+        return false;
+    }
 
-bool GraphBFSUnitTest2() {
-    Graph graph;
-    graph.addVertex("A");
-    graph.addVertex("B");
-    graph.addVertex("C");
-    graph.addVertex("D");
-    graph.addVertex("E");
-    graph.addVertex("F");
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("B", "E");
-    graph.addEdge("C", "F");
+    static bool GraphBFSUnitTest2() {
+        Graph graph;
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+        graph.addVertex("F");
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("B", "E");
+        graph.addEdge("C", "F");
 
-    // Start BFS at node C
-    graph.breadthFirstSearch("C");
-    graph.printBFSTree();
+        // Start BFS at node C
+        graph.breadthFirstSearch("C");
+        graph.printBFSTree();
 
-    return false;
-}
+        return false;
+    }
 
 // Path found
-bool GraphShortestPathUnitTest1() {
-    Graph graph;
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("B", "G");
-    graph.addEdge("C", "H");
-    graph.addEdge("C", "I");
-    graph.addEdge("C", "J");
-    graph.addEdge("J", "K");
+    static bool GraphShortestPathUnitTest1() {
+        Graph graph;
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("B", "G");
+        graph.addEdge("C", "H");
+        graph.addEdge("C", "I");
+        graph.addEdge("C", "J");
+        graph.addEdge("J", "K");
 
-    std::string expected = "Shortest path from A to I: A -> C -> I";
-    std::string actual = graph.shortestPath("A", "I");
+        std::string expected = "Shortest path from A to I: A -> C -> I";
+        std::string actual = graph.shortestPath("A", "I");
 
-    graph.printBFSTree();
-    std::cout << "start: A, end; I" << std::endl;
+        graph.printBFSTree();
+        std::cout << "start: A, end; I" << std::endl;
 
-    std::cout << "expected: " << expected << std::endl;
-    std::cout << "actual  : " << actual << std::endl;
+        std::cout << "expected: " << expected << std::endl;
+        std::cout << "actual  : " << actual << std::endl;
 
-    return expected == actual;
-}
+        return expected == actual;
+    }
 
 // Start vertex does not exist
-bool GraphShortestPathUnitTest2() {
-    Graph graph;
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("D", "E");
+    static bool GraphShortestPathUnitTest2() {
+        Graph graph;
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("D", "E");
 
-    std::string expected = "Error: Start vertex 'X' not found";
-    std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
+        std::string expected = "Error: Start vertex 'X' not found";
+        std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
 
-    graph.printBFSTree();
-    std::cout << "start: X, end; B" << std::endl;
+        graph.printBFSTree();
+        std::cout << "start: X, end; B" << std::endl;
 
-    std::cout << "expected: " << expected << std::endl;
-    std::cout << "actual  : " << actual << std::endl;
+        std::cout << "expected: " << expected << std::endl;
+        std::cout << "actual  : " << actual << std::endl;
 
-    return expected == actual;
-}
+        return expected == actual;
+    }
 
 // End vertex does not exist
-bool GraphShortestPathUnitTest3() {
-    Graph graph;
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("D", "E");
+    static bool GraphShortestPathUnitTest3() {
+        Graph graph;
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("D", "E");
 
-    std::string expected = "Error: End vertex 'Y' not found";
-    std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
+        std::string expected = "Error: End vertex 'Y' not found";
+        std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
 
-    graph.printBFSTree();
-    std::cout << "start: A, end; I" << std::endl;
+        graph.printBFSTree();
+        std::cout << "start: A, end; I" << std::endl;
 
-    std::cout << "expected: " << expected << std::endl;
-    std::cout << "actual  : " << actual << std::endl;
+        std::cout << "expected: " << expected << std::endl;
+        std::cout << "actual  : " << actual << std::endl;
 
-    return actual == expected;
-}
+        return actual == expected;
+    }
 
 // Both vertices exist, but not connected
-bool GraphShortestPathUnitTest4() {
-    Graph graph;
-    graph.addEdge("A", "B");
-    graph.addEdge("A", "C");
-    graph.addEdge("B", "D");
-    graph.addEdge("D", "E");
+    static bool GraphShortestPathUnitTest4() {
+        Graph graph;
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "D");
+        graph.addEdge("D", "E");
 
-    graph.addVertex("Z"); // Add a discontinuous vertex
+        graph.addVertex("Z"); // Add a discontinuous vertex
 
-    std::string expected = "No path from A to Z";
-    std::string actual = graph.shortestPath("A", "Z");
+        std::string expected = "No path from A to Z";
+        std::string actual = graph.shortestPath("A", "Z");
 
-    graph.printBFSTree();
-    std::cout << "start: A, end; Z" << std::endl;
+        graph.printBFSTree();
+        std::cout << "start: A, end; Z" << std::endl;
 
-    std::cout << "expected: " << expected << std::endl;
-    std::cout << "actual  : " << actual << std::endl;
+        std::cout << "expected: " << expected << std::endl;
+        std::cout << "actual  : " << actual << std::endl;
 
-    return actual == expected;
-}
+        return actual == expected;
+    }
 
-void runLinkedListUnitTests() {
-    std::cout << result(LinkedListUnitTest1, "LinkedListUnitTest1") << std::endl;
-    std::cout << result(LinkedListUnitTest2, "LinkedListUnitTest2") << std::endl;
-    std::cout << result(LinkedListCopyConstructorTest1, "LinkedListCopyConstructorTest1") << std::endl;
-    std::cout << result(LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1") << std::endl;
-    std::cout << result(GraphUnitTest1, "GraphUnitTest1") << std::endl;
-    std::cout << result(GraphUnitTest2, "GraphUnitTest2") << std::endl;
-    std::cout << result(GraphCopyConstructorTest1, "GraphCopyConstructorTest1") << std::endl;
-    std::cout << result(GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1") << std::endl;
-    std::cout << result(GraphBFSUnitTest1, "GraphBFSUnitTest1") << std::endl;
-    std::cout << result(GraphBFSUnitTest2, "GraphBFSUnitTest2") << std::endl;
-    std::cout << result(GraphShortestPathUnitTest1, "GraphShortestPathUnitTest1") << std::endl;
-    std::cout << result(GraphShortestPathUnitTest2, "GraphShortestPathUnitTest2") << std::endl;
-    std::cout << result(GraphShortestPathUnitTest3, "GraphShortestPathUnitTest3") << std::endl;
-    std::cout << result(GraphShortestPathUnitTest4, "GraphShortestPathUnitTest4") << std::endl;
-    std::cout << "Done" << std::endl;
-}
+    // Other static test functions as before
+
+    static std::string result(std::function<bool()> func, const std::string& unitTestName) {
+        std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
+        if (func()) {
+            return "✅ Passed Unit Test " + unitTestName;
+        } else {
+            return "❌ Failed Unit Test " + unitTestName;
+        }
+    }
+
+public:
+    static void runAllTests() {
+        // List of all tests paired with their names
+        std::vector<std::pair<std::function<bool()>, std::string>> tests = {
+            {LinkedListUnitTest1, "LinkedListUnitTest1"},
+            {LinkedListUnitTest2, "LinkedListUnitTest2"},
+            {LinkedListCopyConstructorTest1, "LinkedListCopyConstructorTest1"},
+            {LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1"},
+            {GraphUnitTest1, "GraphUnitTest1"},
+            {GraphUnitTest2, "GraphUnitTest2"},
+            {GraphCopyConstructorTest1, "GraphCopyConstructorTest1"},
+            {GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1"},
+            {GraphBFSUnitTest1, "GraphBFSUnitTest1"},
+            {GraphBFSUnitTest2, "GraphBFSUnitTest2"},
+            {GraphShortestPathUnitTest1, "GraphShortestPathUnitTest1"},
+            {GraphShortestPathUnitTest2, "GraphShortestPathUnitTest2"},
+            {GraphShortestPathUnitTest3, "GraphShortestPathUnitTest3"},
+            {GraphShortestPathUnitTest4, "GraphShortestPathUnitTest4"}
+        };
+
+        // Iterate through each test, execute it, and print the result
+        for (const auto& test : tests) {
+            std::cout << result(test.first, test.second) << std::endl;
+        }
+        std::cout << "Done" << std::endl;
+    }
+};
 
 #endif //PROJECT5_UNITTESTS_H

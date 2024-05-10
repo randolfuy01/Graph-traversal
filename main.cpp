@@ -1,6 +1,6 @@
 #include <iostream>
 #include "UnitTests.h"
 int main() {
-    runLinkedListUnitTests();
+    UnitTest::runAllTests();
     return 0;
 }
