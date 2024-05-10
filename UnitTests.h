@@ -6,15 +6,16 @@
 #define PROJECT5_UNITTESTS_H
 
 #include <iostream>
+#include <sstream>
 #include "Graph.h"
 
 typedef bool (*UnitTestFunc)();
 
 bool LinkedListUnitTest1() {
     LinkedList list = *new LinkedList("A");
-    list.addNode("B");
-    list.addNode("C");
-    list.addNode("D"); // Should be A -> B -> C -> D
+    list.enqueue("B");
+    list.enqueue("C");
+    list.enqueue("D"); // Should be A -> B -> C -> D
     std::string expected = "A -> B -> C -> D";
     std::string actual = list.printLinkedList();
     std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
@@ -23,8 +24,8 @@ bool LinkedListUnitTest1() {
 
 bool LinkedListUnitTest2() {
     LinkedList list = *new LinkedList("San Francisco");
-    list.addNode("Los Angeles");
-    list.addNode("New York");
+    list.enqueue("Los Angeles");
+    list.enqueue("New York");
     std::string expected = "San Francisco -> Los Angeles -> New York";
     std::string actual = list.printLinkedList();
     std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
@@ -33,14 +34,14 @@ bool LinkedListUnitTest2() {
 
 bool LinkedListCopyConstructorTest1() {
     LinkedList list1;
-    list1.addNode("Hello");
-    list1.addNode("World");
+    list1.enqueue("Hello");
+    list1.enqueue("World");
 
     // Create a copy using the copy constructor
     LinkedList list2(list1);
 
     // Modify list1
-    list1.addNode("New Node");
+    list1.enqueue("New Node");
 
     // Check that list2 didn't change after changing list1
     bool isCopyConstructorPassing = (list2.printLinkedList() == "Hello -> World");
@@ -50,15 +51,15 @@ bool LinkedListCopyConstructorTest1() {
 
 bool LinkedListCopyAssignmentOperatorTest1() {
     LinkedList list1;
-    list1.addNode("Hello");
-    list1.addNode("World");
+    list1.enqueue("Hello");
+    list1.enqueue("World");
 
     // Create an empty list and then assign to it to make a copy.
     LinkedList list2;
     list2 = list1;
 
     // Modify list1
-    list1.addNode("New Node");
+    list1.enqueue("New Node");
 
     // Check that list2 didn't change after changing list1
     bool isCopyAssignmentPassing = (list2.printLinkedList() == "Hello -> World");
@@ -92,8 +93,8 @@ bool GraphUnitTest2() {
     std::cout << "actual: \n" << actual << std::endl;
     std::cout << "expected: \n" << expected;
     std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles", "New York"}, {"Los Angeles", "San Francisco", "New York"}, {"New York", "San Francisco", "Los Angeles"}};
-    for (int i = 0; i < graph.graph.size(); i++) {
-        LinkedList* list = graph.graph[i];
+    for (int i = 0; i < graph.edges.size(); i++) {
+        LinkedList* list = graph.edges[i];
         Node* current = list->head;
         int j = 0;
         while (current->next != nullptr) {
@@ -148,6 +149,24 @@ bool GraphCopyAssignmentOperatorTest1() {
     return (originalGraph.printGraph() == copiedGraph.printGraph());
 }
 
+bool GraphBFSUnitTest1() {
+    Graph graph;
+    graph.addEdge("A", "B");
+    graph.addEdge("A", "C");
+    graph.addEdge("B", "D");
+    graph.addEdge("C", "D");
+    graph.addEdge("D", "E");
+    graph.addEdge("E", "F");
+    graph.addEdge("F", "G");
+
+    std::string expected = "A -> B -> C -> D -> E -> F -> G";
+    std::string actual;
+    
+    graph.breadthFirstSearch("A");
+
+    return expected == actual;
+}
+
 void runLinkedListUnitTests() {
     std::cout << result(LinkedListUnitTest1, "LinkedListUnitTest1") << std::endl;
     std::cout << result(LinkedListUnitTest2, "LinkedListUnitTest2") << std::endl;
@@ -157,5 +176,6 @@ void runLinkedListUnitTests() {
     std::cout << result(GraphUnitTest2, "GraphUnitTest2") << std::endl;
     std::cout << result(GraphCopyConstructorTest1, "GraphCopyConstructorTest1") << std::endl;
     std::cout << result(GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1") << std::endl;
+    GraphBFSUnitTest1();
 }
 #endif //PROJECT5_UNITTESTS_H
