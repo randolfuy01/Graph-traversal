@@ -128,15 +128,6 @@ class UnitTest {
         return (originalGraph.printGraph() == copiedGraph.printGraph());
     }
 
-    std::string result(UnitTestFunc func, const std::string &unitTestName) {
-        std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
-        if (func()) {
-            return "✅Passed Unit Test " + unitTestName;
-        } else {
-            return "❌ Failed Unit Test " + unitTestName;
-        }
-    }
-
     static bool GraphCopyAssignmentOperatorTest1() {
         Graph originalGraph;
         originalGraph.addEdge("A", "B");
