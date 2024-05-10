@@ -151,24 +151,48 @@ bool GraphCopyAssignmentOperatorTest1() {
 
 bool GraphBFSUnitTest1() {
     Graph graph;
+
+    graph.addVertex("A");
+    graph.addVertex("B");
+    graph.addVertex("C");
+    graph.addVertex("D");
+    graph.addVertex("E");
+    graph.addVertex("F");
     graph.addEdge("A", "B");
     graph.addEdge("A", "C");
     graph.addEdge("B", "D");
-    graph.addEdge("B", "G");
-    graph.addEdge("C", "H");
-    graph.addEdge("C", "I");
-    graph.addEdge("C", "J");
-    graph.addEdge("J", "K");
+    graph.addEdge("B", "E");
+    graph.addEdge("C", "F");
 
-    std::string expected = "A -> B -> C -> D -> E -> F -> G";
-    std::string actual;
-    
-    std::cout << graph.printGraph() << std::endl;
     graph.breadthFirstSearch("A");
+    graph.printBFSTree();
 
-    return expected == actual;
+
+    return false;
 }
 
+bool GraphBFSUnitTest2() {
+    Graph graph;
+    graph.addVertex("A");
+    graph.addVertex("B");
+    graph.addVertex("C");
+    graph.addVertex("D");
+    graph.addVertex("E");
+    graph.addVertex("F");
+    graph.addEdge("A", "B");
+    graph.addEdge("A", "C");
+    graph.addEdge("B", "D");
+    graph.addEdge("B", "E");
+    graph.addEdge("C", "F");
+
+    // Start BFS at node C
+    graph.breadthFirstSearch("C");
+    graph.printBFSTree();
+
+    return false;
+}
+
+// Path found
 bool GraphShortestPathUnitTest1() {
     Graph graph;
     graph.addEdge("A", "B");
@@ -180,10 +204,68 @@ bool GraphShortestPathUnitTest1() {
     graph.addEdge("C", "J");
     graph.addEdge("J", "K");
 
-    std::string expected = "Shortest path from A to G: G B A";
+    std::string expected = "Shortest path from A to G: A B G";
     std::string actual = graph.shortestPath("A", "G");
 
+    std::cout << "expected: " << expected << std::endl;
+    std::cout << "actual  : " << actual << std::endl;
+
     return expected == actual;
+}
+
+// Start vertex does not exist
+bool GraphShortestPathUnitTest2() {
+    Graph graph;
+    graph.addEdge("A", "B");
+    graph.addEdge("A", "C");
+    graph.addEdge("B", "D");
+    graph.addEdge("D", "E");
+
+
+    std::string expected = "Start vertex not found";
+    std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
+
+    std::cout << "expected: " << expected << std::endl;
+    std::cout << "actual  : " << actual << std::endl;
+
+    // Verify if the function returns the correct error message
+    return expected == actual;
+}
+
+// End vertex does not exist
+bool GraphShortestPathUnitTest3() {
+    Graph graph;
+    graph.addEdge("A", "B");
+    graph.addEdge("A", "C");
+    graph.addEdge("B", "D");
+    graph.addEdge("D", "E");
+
+    std::string expected = "End vertex not found";
+    std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
+
+    std::cout << "expected: " << expected << std::endl;
+    std::cout << "actual  : " << actual << std::endl;
+
+    return actual == expected;
+}
+
+// Both vertices exist, but not connected
+bool GraphShortestPathUnitTest4() {
+    Graph graph;
+    graph.addEdge("A", "B");
+    graph.addEdge("A", "C");
+    graph.addEdge("B", "D");
+    graph.addEdge("D", "E");
+
+    graph.addVertex("Z"); // Add a discontinuous vertex
+
+    std::string expected = "No path from A to Z";
+    std::string actual = graph.shortestPath("A", "Z");
+
+    std::cout << "expected: " << expected << std::endl;
+    std::cout << "actual  : " << actual << std::endl;
+
+    return actual == expected;
 }
 
 void runLinkedListUnitTests() {
@@ -195,8 +277,12 @@ void runLinkedListUnitTests() {
     std::cout << result(GraphUnitTest2, "GraphUnitTest2") << std::endl;
     std::cout << result(GraphCopyConstructorTest1, "GraphCopyConstructorTest1") << std::endl;
     std::cout << result(GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1") << std::endl;
-    GraphBFSUnitTest1();
+    std::cout << result(GraphBFSUnitTest1, "GraphBFSUnitTest1") << std::endl;
+    std::cout << result(GraphBFSUnitTest2, "GraphBFSUnitTest2") << std::endl;
     std::cout << result(GraphShortestPathUnitTest1, "GraphShortestPathUnitTest1") << std::endl;
+    std::cout << result(GraphShortestPathUnitTest2, "GraphShortestPathUnitTest2") << std::endl;
+    std::cout << result(GraphShortestPathUnitTest3, "GraphShortestPathUnitTest3") << std::endl;
+    std::cout << result(GraphShortestPathUnitTest4, "GraphShortestPathUnitTest4") << std::endl;
     std::cout << "Done" << std::endl;
 }
 

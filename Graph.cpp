@@ -284,7 +284,7 @@ void Graph::breadthFirstSearch(const std::string& start) {
 
     // If the starting vertex is not found, return
     if (startNode == nullptr) {
-        std::cout << "Vertex not found" << std::endl;
+        //std::cout << "Vertex not found" << std::endl;
         return;
     }
 
@@ -321,7 +321,6 @@ void Graph::breadthFirstSearch(const std::string& start) {
         nextInQueue->color = "black"; // Mark the vertex as visited after processing its neighbors
     }
 
-    printBFSTree();
 }
 
 void Graph::printBFSTree() const {
@@ -351,41 +350,46 @@ void Graph::printBFSTreeHelper(Node* node, int level) const {
     }
 }
 
-std::string Graph::shortestPath(std::string start, std::string end) {
+// Calculates the shortest path in the graph between two given nodes
+std::string Graph::shortestPath(const std::string& start, const std::string& end) {
     breadthFirstSearch(start);
-
-    std::string result = "";
 
     Node* startNode = nullptr;
     Node* endNode = nullptr;
 
-    for (auto & i : vertices) {
-        if (i->val == start) {
-            startNode = i;
+    // Locate and assign the start and end nodes based on their values
+    for (auto& vertex : vertices) {
+        if (vertex->val == start) {
+            startNode = vertex;
         }
-        if (i->val == end) {
-            endNode = i;
+        if (vertex->val == end) {
+            endNode = vertex;
+        }
+        if (startNode && endNode) {
+            break; // stop searching if both nodes are found
         }
     }
 
-    if (startNode == nullptr || endNode == nullptr) {
-        std::cout << "Vertex not found" << std::endl;
-        return result;
+    // Check and handle different error scenarios
+    if (startNode == nullptr) {
+        return "Start vertex not found";
     }
-
+    if (endNode == nullptr) {
+        return "End vertex not found";
+    }
     if (endNode->parent == nullptr) {
-        std::cout << "No path from " << start << " to " << end << std::endl;
-    } else {
-        result = "Shortest path from " + start + " to " + end + ": ";
-        Node* current = endNode;
-        while (current != nullptr) {
-            result += current->val + " ";
-            current = current->parent;
-        }
-        std::cout << result << std::endl;
+        return "No path from " + start + " to " + end;
     }
 
-    return result;
+    // Construct a string representing the shortest path from the start node to the end node
+    std::string path = endNode->val;
+    for (Node *current = endNode->parent; current != nullptr; current = current->parent) {
+        path.insert(0, current->val + " ");
+    }
+    path = "Shortest path from " + start + " to " + end + ": " + path;
+
+    return path;
 }
+
 
 

@@ -72,7 +72,7 @@ public:
     void printBFSTree() const;
     void printBFSTreeHelper(Node* node, int level) const;
 
-    std::string shortestPath(std::string start, std::string end);
+    std::string shortestPath(const std::string& start, const std::string& end);
 
     std::string printGraph() const;
 
