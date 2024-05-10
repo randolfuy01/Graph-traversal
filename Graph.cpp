@@ -352,23 +352,18 @@ void Graph::printBFSTreeHelper(Node* node, int level) const {
 
 // Calculates the shortest path in the graph between two given nodes
 std::string Graph::shortestPath(const std::string& start, const std::string& end) {
+
+    // Handle the case where start is the same as end
+    if (start == end) {
+        return "Shortest path from " + start + " to " + end + ": " + start;
+    }
+
+    // Execute breadth-first search from the start node
     breadthFirstSearch(start);
 
-    Node* startNode = nullptr;
-    Node* endNode = nullptr;
-
-    // Locate and assign the start and end nodes based on their values
-    for (auto& vertex : vertices) {
-        if (vertex->val == start) {
-            startNode = vertex;
-        }
-        if (vertex->val == end) {
-            endNode = vertex;
-        }
-        if (startNode && endNode) {
-            break; // stop searching if both nodes are found
-        }
-    }
+    // Find the start and end nodes
+    Node* startNode = findVertex(start);
+    Node* endNode = findVertex(end);
 
     // Check and handle different error scenarios
     if (startNode == nullptr) {
@@ -381,14 +376,15 @@ std::string Graph::shortestPath(const std::string& start, const std::string& end
         return "No path from " + start + " to " + end;
     }
 
-    // Construct a string representing the shortest path from the start node to the end node
+    // Construct the path from end to start using parent pointers
     std::string path = endNode->val;
-    for (Node *current = endNode->parent; current != nullptr; current = current->parent) {
-        path.insert(0, current->val + " ");
+    Node *current = endNode->parent;
+    while (current != nullptr) {
+        path = current->val + " -> " + path;
+        current = current->parent;
     }
-    path = "Shortest path from " + start + " to " + end + ": " + path;
 
-    return path;
+    return "Shortest path from " + start + " to " + end + ": " + path;
 }
 
 

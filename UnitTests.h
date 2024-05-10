@@ -204,7 +204,7 @@ bool GraphShortestPathUnitTest1() {
     graph.addEdge("C", "J");
     graph.addEdge("J", "K");
 
-    std::string expected = "Shortest path from A to I: A C I";
+    std::string expected = "Shortest path from A to I: A -> C -> I";
     std::string actual = graph.shortestPath("A", "I");
 
     graph.printBFSTree();
