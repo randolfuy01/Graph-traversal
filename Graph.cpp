@@ -267,18 +267,11 @@ LinkedList* Graph::findEdge(const std::string& vertex) const {
 
 void Graph::breadthFirstSearch(const std::string& start) {
     // Find the starting vertex
-    Node* startNode = nullptr;
-    for (auto & i : vertices) {
-        if (i->val == start) {
-            startNode = i;
-            break;
-        }
-    }
+    Node* startNode = findVertex(start);
 
     // If the starting vertex is not found, return
     if (startNode == nullptr) {
-        //std::cout << "Vertex not found" << std::endl;
-        return;
+        throw std::runtime_error("Error: Start vertex '" + start + "' not found");
     }
 
     // Initialize all vertices to white
@@ -358,8 +351,13 @@ std::string Graph::shortestPath(const std::string& start, const std::string& end
         return "Shortest path from " + start + " to " + end + ": " + start;
     }
 
+
     // Execute breadth-first search from the start node
-    breadthFirstSearch(start);
+    try {
+        breadthFirstSearch(start);
+    } catch (const std::runtime_error &e) {
+        return e.what();
+    }
 
     // Find the start and end nodes
     Node* startNode = findVertex(start);
@@ -367,10 +365,10 @@ std::string Graph::shortestPath(const std::string& start, const std::string& end
 
     // Check and handle different error scenarios
     if (startNode == nullptr) {
-        return "Start vertex not found";
+        return "Error: Start vertex '" + start + "' not found";
     }
     if (endNode == nullptr) {
-        return "End vertex not found";
+        return "Error: End vertex '" + end + "' not found";
     }
     if (endNode->parent == nullptr) {
         return "No path from " + start + " to " + end;

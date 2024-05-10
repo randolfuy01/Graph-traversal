@@ -224,7 +224,7 @@ bool GraphShortestPathUnitTest2() {
     graph.addEdge("B", "D");
     graph.addEdge("D", "E");
 
-    std::string expected = "Start vertex not found";
+    std::string expected = "Error: Start vertex 'X' not found";
     std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
 
     graph.printBFSTree();
@@ -244,7 +244,7 @@ bool GraphShortestPathUnitTest3() {
     graph.addEdge("B", "D");
     graph.addEdge("D", "E");
 
-    std::string expected = "End vertex not found";
+    std::string expected = "Error: End vertex 'Y' not found";
     std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
 
     graph.printBFSTree();
