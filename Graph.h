@@ -169,15 +169,24 @@ public:
     // Return the first node in the LinkedList
     const Node<T> *begin() const { return head; }
 
+
+    // Convert a node value to a string to be used in print functions
+    std::string to_string(const T &t) const {
+        std::ostringstream oss;
+        oss << t;
+        return oss.str();
+    }
+
+
     // Print the LinkedList ex. A -> B -> C -> D
     std::string printLinkedList() const {
         std::string result;
         Node<T> *current = head;
         while (current->next != nullptr) {
-            result += current->val + " -> ";
+            result += to_string(current->val) + " -> ";
             current = current->next;
         }
-        result += current->val;
+        result += to_string(current->val);
         return result;
     } // End of printLinkedList
 
@@ -278,6 +287,11 @@ public:
     } // End of copy assignment operator
 
 // Section: Public Member Functions
+
+    // Get the edges of the graph
+    std::vector<LinkedList<T> *> getEdges() const {
+        return edges;
+    }
 
     // Add an edge between two vertices in the graph
     void addEdge(const T &vertex1, const T &vertex2) {

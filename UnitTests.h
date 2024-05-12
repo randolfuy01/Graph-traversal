@@ -11,27 +11,35 @@
 
 class UnitTest {
 
-    typedef bool (*UnitTestFunc)();
+private:
 
-    static bool LinkedListUnitTest1() {
-        LinkedList<std::string> list = *new LinkedList<std::string>("A");
-        list.enqueue("B");
-        list.enqueue("C");
-        list.enqueue("D"); // Should be A -> B -> C -> D
-        std::string expected = "A -> B -> C -> D";
+    static bool LinkedListIntegerUnitTest() {
+        LinkedList<int> list = *new LinkedList<int>(1);
+        list.enqueue(2);
+        list.enqueue(3);
+        list.enqueue(4);
+        std::string expected = "1 -> 2 -> 3 -> 4";
         std::string actual = list.printLinkedList();
-        std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
         return expected == actual;
     }
 
-    static bool LinkedListUnitTest2() {
+    static bool LinkedListStringUnitTest() {
         LinkedList<std::string> list;
         list.enqueue("San Francisco");
         list.enqueue("Los Angeles");
         list.enqueue("New York");
         std::string expected = "San Francisco -> Los Angeles -> New York";
         std::string actual = list.printLinkedList();
-        std::cout << "actual:   " << actual << "\nexpected: " << expected << std::endl;
+        return expected == actual;
+    }
+
+    static bool LinkedListCharUnitTest() {
+        LinkedList<char> list;
+        list.enqueue('a');
+        list.enqueue('b');
+        list.enqueue('c');
+        std::string expected = "a -> b -> c";
+        std::string actual = list.printLinkedList();
         return expected == actual;
     }
 
@@ -53,36 +61,31 @@ class UnitTest {
     }
 
     static bool LinkedListCopyAssignmentOperatorTest1() {
-        LinkedList<std::string> list1;
-        list1.enqueue("Hello");
-        list1.enqueue("World");
+        LinkedList<int> list1;
+        list1.enqueue(1);
+        list1.enqueue(2);
 
         // Create an empty list and then assign to it to make a copy.
-        LinkedList<std::string> list2;
+        LinkedList<int> list2;
         list2 = list1;
 
         // Modify list1
-        list1.enqueue("New Node");
+        list1.enqueue(3);
 
         // Check that list2 didn't change after changing list1
-        bool isCopyAssignmentPassing = (list2.printLinkedList() == "Hello -> World");
-
-        return isCopyAssignmentPassing;
+        return (list2.printLinkedList() == "1 -> 2");
     }
 
-// TO-DO: Implement Graph Unit Tests
     static bool GraphUnitTest1() {
-        Graph<std::string> graph = *new Graph<std::string>();
-        graph.addEdge("A", "B");
-        graph.addEdge("A", "C");
-        graph.addEdge("A", "D");
-        graph.addEdge("B", "C");
-        graph.addEdge("B", "D");
-        graph.addEdge("C", "D");
+        Graph<char> graph = *new Graph<char>();
+        graph.addEdge('A', 'B');
+        graph.addEdge('A', 'C');
+        graph.addEdge('A', 'D');
+        graph.addEdge('B', 'C');
+        graph.addEdge('B', 'D');
+        graph.addEdge('C', 'D');
         std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C\n";
         std::string actual = graph.printGraphEdges();
-        std::cout << "actual: \n" << actual << std::endl;
-        std::cout << "expected: \n" << expected;
         return expected == actual;
     }
 
@@ -93,14 +96,12 @@ class UnitTest {
         graph.addEdge("Los Angeles", "New York");
         std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
         std::string actual = graph.printGraphEdges();
-        std::cout << "actual: \n" << actual << std::endl;
-        std::cout << "expected: \n" << expected;
         std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles",   "New York"},
                                                                 {"Los Angeles",   "San Francisco", "New York"},
                                                                 {"New York",      "San Francisco", "Los Angeles"}};
 
-        for (int i = 0; i < graph.edges.size(); i++) {
-            LinkedList<std::string> *list = graph.edges[i];
+        for (int i = 0; i < graph.getEdges().size(); i++) {
+            LinkedList<std::string> *list = graph.getEdges()[i];
             const Node<std::string> *current = list->begin();
             int j = 0;
             while (current->next != nullptr) {
@@ -162,7 +163,6 @@ class UnitTest {
         graph.addEdge("C", "F");
 
         graph.breadthFirstSearch("A");
-        graph.printBFSTree();
 
         // Verify that the BFS has correctly assigned parents in the BFS tree starting from node 'A'
         if (graph.findVertex("B")->parent != graph.findVertex("A")) return false;
@@ -190,7 +190,6 @@ class UnitTest {
         graph.addEdge("C", "F");
 
         graph.breadthFirstSearch("C");
-        graph.printBFSTree();
 
         // Verify that the BFS has correctly assigned parents in the BFS tree starting from node 'C'
         if (graph.findVertex("A")->parent != graph.findVertex("C")) return false;
@@ -202,7 +201,7 @@ class UnitTest {
         return true;
     }
 
-// Path found
+    // Test for when path found
     static bool GraphShortestPathUnitTest1() {
         Graph<std::string> graph;
         graph.addEdge("A", "B");
@@ -217,16 +216,10 @@ class UnitTest {
         std::string expected = "Shortest path from A to I: A -> C -> I";
         std::string actual = graph.shortestPath("A", "I");
 
-        graph.printBFSTree();
-        std::cout << "start: A, end; I" << std::endl;
-
-        std::cout << "expected: " << expected << std::endl;
-        std::cout << "actual  : " << actual << std::endl;
-
         return expected == actual;
     }
 
-// Start vertex does not exist
+    // Test for when start vertex does not exist
     static bool GraphShortestPathUnitTest2() {
         Graph<std::string> graph;
         graph.addEdge("A", "B");
@@ -237,16 +230,10 @@ class UnitTest {
         std::string expected = "Error: Start vertex 'X' not found";
         std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
 
-        graph.printBFSTree();
-        std::cout << "start: X, end; B" << std::endl;
-
-        std::cout << "expected: " << expected << std::endl;
-        std::cout << "actual  : " << actual << std::endl;
-
         return expected == actual;
     }
 
-// End vertex does not exist
+    // Test for when the end vertex does not exist
     static bool GraphShortestPathUnitTest3() {
         Graph<std::string> graph;
         graph.addEdge("A", "B");
@@ -257,16 +244,10 @@ class UnitTest {
         std::string expected = "Error: End vertex 'Y' not found";
         std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
 
-        graph.printBFSTree();
-        std::cout << "start: A, end; I" << std::endl;
-
-        std::cout << "expected: " << expected << std::endl;
-        std::cout << "actual  : " << actual << std::endl;
-
         return actual == expected;
     }
 
-// Both vertices exist, but not connected
+    // Test when both vertices exist, but not connected
     static bool GraphShortestPathUnitTest4() {
         Graph<std::string> graph;
         graph.addEdge("A", "B");
@@ -274,24 +255,16 @@ class UnitTest {
         graph.addEdge("B", "D");
         graph.addEdge("D", "E");
 
-        graph.addVertex("Z"); // Add a discontinuous vertex
+        graph.addVertex("Z");
 
         std::string expected = "No path from A to Z";
         std::string actual = graph.shortestPath("A", "Z");
 
-        graph.printBFSTree();
-        std::cout << "start: A, end; Z" << std::endl;
-
-        std::cout << "expected: " << expected << std::endl;
-        std::cout << "actual  : " << actual << std::endl;
-
         return actual == expected;
     }
 
-    // Other static test functions as before
-
+    // Helper function to print the result of a unit test
     static std::string result(std::function<bool()> func, const std::string &unitTestName) {
-        std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
         if (func()) {
             return "✅ Passed Unit Test " + unitTestName;
         } else {
@@ -301,10 +274,13 @@ class UnitTest {
 
 public:
     static void runAllTests() {
+        std::cout << "Running all unit tests..." << std::endl;
+
         // List of all tests paired with their names
         std::vector<std::pair<std::function<bool()>, std::string>> tests = {
-                {LinkedListUnitTest1,                   "LinkedListUnitTest1"},
-                {LinkedListUnitTest2,                   "LinkedListUnitTest2"},
+                {LinkedListIntegerUnitTest,             "LinkedListIntegerUnitTest"},
+                {LinkedListStringUnitTest,              "LinkedListStringUnitTest"},
+                {LinkedListCharUnitTest,                "LinkedListCharUnitTest"},
                 {LinkedListCopyConstructorTest1,        "LinkedListCopyConstructorTest1"},
                 {LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1"},
                 {GraphUnitTest1,                        "GraphUnitTest1"},
@@ -323,6 +299,7 @@ public:
         for (const auto &test: tests) {
             std::cout << result(test.first, test.second) << std::endl;
         }
+
         std::cout << "Done" << std::endl;
     }
 };
