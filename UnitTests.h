@@ -101,7 +101,7 @@ class UnitTest {
 
         for (int i = 0; i < graph.edges.size(); i++) {
             LinkedList<std::string> *list = graph.edges[i];
-            Node<std::string> *current = list->head;
+            const Node<std::string> *current = list->begin();
             int j = 0;
             while (current->next != nullptr) {
                 if (current->val != expectedValues[i][j]) {

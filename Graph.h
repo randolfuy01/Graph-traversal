@@ -7,7 +7,9 @@
 #include <set>
 #include <climits>  // For INT_MAX
 
-// Node struct points to the next node
+// --------------------------
+// Node Struct Declaration
+// --------------------------
 template<typename T>
 struct Node {
     Node *next = nullptr;
@@ -17,13 +19,26 @@ struct Node {
     int distance = INT_MAX; // signifies unvisited or unreachable node
 };
 
-// Singly Linked List implementation for the Graph
+// --------------------------
+// LinkedList Class Declaration
+// --------------------------
 template<typename T>
 class LinkedList {
 
-public:
+private:
 
     Node<T> *head{};
+
+    Node<T> *createNode(T val) {
+        Node<T> *newNode = new Node<T>;
+        newNode->val = std::move(val);
+        newNode->next = nullptr;
+        return newNode;
+    }
+
+
+public:
+
 
     LinkedList() {
         head = nullptr;
@@ -135,6 +150,8 @@ public:
         return temp;
     }
 
+    const Node<T> *begin() const { return head; }
+
 // Print the LinkedList ex. A -> B -> C -> D
     std::string printLinkedList() const {
         std::string result;
@@ -147,17 +164,11 @@ public:
         return result;
     }
 
-private:
-
-    Node<T> *createNode(T val) {
-        Node<T> *newNode = new Node<T>;
-        newNode->val = std::move(val);
-        newNode->next = nullptr;
-        return newNode;
-    }
 };
 
-// Graph class that inherits from LinkedList
+// --------------------------
+// Graph Class Declaration
+// --------------------------
 template<typename T>
 class Graph {
 private:
@@ -184,9 +195,9 @@ private:
     }
 
     LinkedList<T> *findEdge(const T &vertex) const {
-        for (auto &i: edges) {
-            if (i->head->val == vertex) {
-                return i;
+        for (auto &edge: edges) {
+            if (edge->begin()->val == vertex) {
+                return edge;
             }
         }
         return nullptr;
@@ -243,10 +254,10 @@ public:
 
         // Search for if the vertex already exists in the edges
         for (auto &list: edges) {
-            if (list->head->val == vertex1) {
+            if (list->begin()->val == vertex1) {
                 list1 = list;
             };
-            if (list->head->val == vertex2) {
+            if (list->begin()->val == vertex2) {
                 list2 = list;
             }
         }
@@ -305,7 +316,7 @@ public:
         startNode->distance = 0;
 
         // Dequeue nodes from the BFS queue and process them until the queue is empty.
-        while (bfsQueue.head != nullptr) {
+        while (bfsQueue.begin() != nullptr) {
             Node<T> *current = bfsQueue.dequeue();
             processNode(current, bfsQueue);
         }
@@ -359,7 +370,7 @@ public:
         LinkedList<T> *adjacencyList = findEdge(node->val);
 
         // Update distances and enqueue unvisited vertices for BFS traversal
-        for (Node<T> *adjacentNode = adjacencyList->head->next;
+        for (Node<T> *adjacentNode = adjacencyList->begin()->next;
              adjacentNode != nullptr; adjacentNode = adjacentNode->next) {
             Node<T> *adjacentVertex = findVertex(adjacentNode->val);
             if (adjacentVertex->color == "white") {
