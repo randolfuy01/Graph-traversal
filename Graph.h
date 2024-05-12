@@ -27,7 +27,11 @@ class LinkedList {
 
 private:
 
+// Section: Private Member Variables
+
     Node<T> *head{};
+
+// Section: Private Member Functions
 
     Node<T> *createNode(T val) {
         Node<T> *newNode = new Node<T>;
@@ -36,90 +40,100 @@ private:
         return newNode;
     }
 
-
-public:
-
-
-    LinkedList() {
+    void clearList() {
+        Node<T> *current = head;
+        while (current != nullptr) {
+            Node<T> *next = current->next;
+            delete current;
+            current = next;
+        }
         head = nullptr;
     }
 
+public:
+
+// Section: Public Constructors, Destructor, and Assignment Operator
+
+    // Default Constructor - create an empty LinkedList
+    LinkedList() : head(nullptr) {}
+
+    // Constructor - create a new LinkedList with a single node
     LinkedList(T val) {
-        head = new Node<T>();
-        head->val = std::move(val);
-        head->next = nullptr;
+        head = createNode(val);
     }
 
+    // Copy constructor - create a deep copy
     LinkedList(const LinkedList &source) {
-        Node<T> *temp = source.head;
-        if (temp == nullptr)
-            head = nullptr;
-        else {
-            head = new Node<T>;
-            head->val = temp->val;
-            Node<T> *newCopy = head;
-            while (temp->next) {
-                temp = temp->next;
-                newCopy->next = new Node<T>;
-                newCopy = newCopy->next;
-                newCopy->val = temp->val;
-            }
-            newCopy->next = nullptr;
-        }
-    }
-
-    ~LinkedList() {
-        Node<T> *current = head;
-        while (current != nullptr) {
-            Node<T> *next = current->next;
-            delete current;
-            current = next;
-        }
-        head = nullptr; // set head to nullptr to avoid the dangling pointer.
-    }
-
-    LinkedList &operator=(const LinkedList &source) {
-        if (this == &source) {
-            return *this;
-        }
-
-        // First, deallocate any value that this instance currently holds
-        Node<T> *current = head;
-        while (current != nullptr) {
-            Node<T> *next = current->next;
-            delete current;
-            current = next;
-        }
-
-        // Then, copy values from source
-        Node<T> *temp = source.head;
-        if (temp == nullptr) {
+        if (source.head == nullptr) {
             head = nullptr;
         } else {
+            // Take care of the first Node separately (since it has no predecessor Node)
             head = new Node<T>;
-            head->val = temp->val;
-            Node<T> *newCopy = head;
-            while (temp->next) {
-                temp = temp->next;
-                newCopy->next = new Node<T>;
-                newCopy = newCopy->next;
-                newCopy->val = temp->val;
-            }
-            newCopy->next = nullptr;
-        }
+            head->val = source.head->val;
+            head->next = nullptr;
 
-        return *this;
+            Node<T> *thisCurrent = head;
+            Node<T> *sourceCurrent = source.head->next;
+
+            // Deep Copy source LinkedList
+            while (sourceCurrent) {
+                Node<T> *newNode = new Node<T>;
+                newNode->val = sourceCurrent->val;
+                newNode->next = nullptr;
+
+                thisCurrent->next = newNode;
+                thisCurrent = thisCurrent->next;
+                sourceCurrent = sourceCurrent->next;  // Move forward in source LinkedList
+            }
+        }
+    } // End of copy constructor
+
+    // Destructor - deallocate memory
+    ~LinkedList() {
+        clearList();
     }
 
-    // Member Functions
+    // Copy assignment operator
+    LinkedList &operator=(const LinkedList &source) {
+        if (this != &source) {
+            // First, deallocate any value that this instance currently holds
+            clearList();  // Call clearList helper function to deallocate memory
 
+            // Then, copy values from source
+            Node<T> *temp = source.head;
+            if (temp == nullptr) {
+                head = nullptr;
+            } else {
+                head = new Node<T>;
+                head->val = temp->val;
+                Node<T> *newCopy = head;
+                while (temp->next) {
+                    temp = temp->next;
+                    newCopy->next = new Node<T>;
+                    newCopy = newCopy->next;
+                    newCopy->val = temp->val;
+                }
+                newCopy->next = nullptr;
+            }
+        }
+        return *this;
+    } // End of copy assignment operator
+
+// Section: Public Member Functions
+
+    // Add a new node to the end of the list with the given value
     void enqueue(T val) {
         Node<T> *newNode = createNode(val);
         enqueue(newNode);
     }
 
-
+    // Add a new node to the end of the list
     void enqueue(Node<T> *newNode) {
+
+        // If the new node is nullptr, throw an exception
+        if (newNode == nullptr) {
+            throw std::invalid_argument("Attempted to enqueue a nullptr");
+        }
 
         // If the LinkedList is empty, set the head to the new node
         if (head == nullptr) {
@@ -133,26 +147,29 @@ public:
             }
             current->next = newNode;
         }
-    }
+    } // End of enqueue
 
 
+    // Remove the first node from the LinkedList and return it
     Node<T> *dequeue() {
-        Node<T> *current = head;
-        Node<T> *previous = nullptr;
 
         // If the LinkedList is empty, return nullptr
         if (head == nullptr) {
             return nullptr;
         }
 
+        Node<T> *current = head;
+        Node<T> *previous = nullptr;
+
         Node<T> *temp = head;
         head = head->next;
         return temp;
-    }
+    } // End of dequeue
 
+    // Return the first node in the LinkedList
     const Node<T> *begin() const { return head; }
 
-// Print the LinkedList ex. A -> B -> C -> D
+    // Print the LinkedList ex. A -> B -> C -> D
     std::string printLinkedList() const {
         std::string result;
         Node<T> *current = head;
@@ -162,9 +179,9 @@ public:
         }
         result += current->val;
         return result;
-    }
+    } // End of printLinkedList
 
-};
+}; // End of LinkedList
 
 // --------------------------
 // Graph Class Declaration
