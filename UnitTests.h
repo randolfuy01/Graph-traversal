@@ -14,7 +14,7 @@ class UnitTest {
     typedef bool (*UnitTestFunc)();
 
     static bool LinkedListUnitTest1() {
-        LinkedList list = *new LinkedList("A");
+        LinkedList<std::string> list = *new LinkedList<std::string>("A");
         list.enqueue("B");
         list.enqueue("C");
         list.enqueue("D"); // Should be A -> B -> C -> D
@@ -25,7 +25,8 @@ class UnitTest {
     }
 
     static bool LinkedListUnitTest2() {
-        LinkedList list = *new LinkedList("San Francisco");
+        LinkedList<std::string> list;
+        list.enqueue("San Francisco");
         list.enqueue("Los Angeles");
         list.enqueue("New York");
         std::string expected = "San Francisco -> Los Angeles -> New York";
@@ -35,7 +36,7 @@ class UnitTest {
     }
 
     static bool LinkedListCopyConstructorTest1() {
-        LinkedList list1;
+        LinkedList<std::string> list1;
         list1.enqueue("Hello");
         list1.enqueue("World");
 
@@ -52,12 +53,12 @@ class UnitTest {
     }
 
     static bool LinkedListCopyAssignmentOperatorTest1() {
-        LinkedList list1;
+        LinkedList<std::string> list1;
         list1.enqueue("Hello");
         list1.enqueue("World");
 
         // Create an empty list and then assign to it to make a copy.
-        LinkedList list2;
+        LinkedList<std::string> list2;
         list2 = list1;
 
         // Modify list1
@@ -71,7 +72,7 @@ class UnitTest {
 
 // TO-DO: Implement Graph Unit Tests
     static bool GraphUnitTest1() {
-        Graph graph = *new Graph();
+        Graph<std::string> graph = *new Graph<std::string>();
         graph.addEdge("A", "B");
         graph.addEdge("A", "C");
         graph.addEdge("A", "D");
@@ -86,7 +87,7 @@ class UnitTest {
     }
 
     static bool GraphUnitTest2() {
-        Graph graph = *new Graph();
+        Graph graph = *new Graph<std::string>();
         graph.addEdge("San Francisco", "Los Angeles");
         graph.addEdge("San Francisco", "New York");
         graph.addEdge("Los Angeles", "New York");
@@ -99,8 +100,8 @@ class UnitTest {
                                                                 {"New York",      "San Francisco", "Los Angeles"}};
 
         for (int i = 0; i < graph.edges.size(); i++) {
-            LinkedList *list = graph.edges[i];
-            Node *current = list->head;
+            LinkedList<std::string> *list = graph.edges[i];
+            Node<std::string> *current = list->head;
             int j = 0;
             while (current->next != nullptr) {
                 if (current->val != expectedValues[i][j]) {
@@ -114,7 +115,7 @@ class UnitTest {
     }
 
     static bool GraphCopyConstructorTest1() {
-        Graph originalGraph;
+        Graph<std::string> originalGraph;
 
         originalGraph.addEdge("A", "B");
         originalGraph.addEdge("A", "C");
@@ -129,14 +130,14 @@ class UnitTest {
     }
 
     static bool GraphCopyAssignmentOperatorTest1() {
-        Graph originalGraph;
+        Graph<std::string> originalGraph;
         originalGraph.addEdge("A", "B");
         originalGraph.addEdge("A", "C");
         originalGraph.addEdge("B", "D");
         originalGraph.addEdge("C", "D");
 
         // Create an empty graph for assignment
-        Graph copiedGraph;
+        Graph<std::string> copiedGraph;
 
         // Create a copy of the original graph
         copiedGraph = originalGraph;
@@ -146,7 +147,7 @@ class UnitTest {
     }
 
     static bool GraphBFSUnitTest1() {
-        Graph graph;
+        Graph<std::string> graph;
 
         graph.addVertex("A");
         graph.addVertex("B");
@@ -174,7 +175,7 @@ class UnitTest {
     }
 
     static bool GraphBFSUnitTest2() {
-        Graph graph;
+        Graph<std::string> graph;
 
         graph.addVertex("A");
         graph.addVertex("B");
@@ -203,7 +204,7 @@ class UnitTest {
 
 // Path found
     static bool GraphShortestPathUnitTest1() {
-        Graph graph;
+        Graph<std::string> graph;
         graph.addEdge("A", "B");
         graph.addEdge("A", "C");
         graph.addEdge("B", "D");
@@ -227,7 +228,7 @@ class UnitTest {
 
 // Start vertex does not exist
     static bool GraphShortestPathUnitTest2() {
-        Graph graph;
+        Graph<std::string> graph;
         graph.addEdge("A", "B");
         graph.addEdge("A", "C");
         graph.addEdge("B", "D");
@@ -247,7 +248,7 @@ class UnitTest {
 
 // End vertex does not exist
     static bool GraphShortestPathUnitTest3() {
-        Graph graph;
+        Graph<std::string> graph;
         graph.addEdge("A", "B");
         graph.addEdge("A", "C");
         graph.addEdge("B", "D");
@@ -267,7 +268,7 @@ class UnitTest {
 
 // Both vertices exist, but not connected
     static bool GraphShortestPathUnitTest4() {
-        Graph graph;
+        Graph<std::string> graph;
         graph.addEdge("A", "B");
         graph.addEdge("A", "C");
         graph.addEdge("B", "D");
@@ -289,7 +290,7 @@ class UnitTest {
 
     // Other static test functions as before
 
-    static std::string result(std::function<bool()> func, const std::string& unitTestName) {
+    static std::string result(std::function<bool()> func, const std::string &unitTestName) {
         std::cout << std::endl << "> Begin " + unitTestName + ":" << std::endl;
         if (func()) {
             return "✅ Passed Unit Test " + unitTestName;
@@ -302,24 +303,24 @@ public:
     static void runAllTests() {
         // List of all tests paired with their names
         std::vector<std::pair<std::function<bool()>, std::string>> tests = {
-            {LinkedListUnitTest1, "LinkedListUnitTest1"},
-            {LinkedListUnitTest2, "LinkedListUnitTest2"},
-            {LinkedListCopyConstructorTest1, "LinkedListCopyConstructorTest1"},
-            {LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1"},
-            {GraphUnitTest1, "GraphUnitTest1"},
-            {GraphUnitTest2, "GraphUnitTest2"},
-            {GraphCopyConstructorTest1, "GraphCopyConstructorTest1"},
-            {GraphCopyAssignmentOperatorTest1, "GraphCopyAssignmentTest1"},
-            {GraphBFSUnitTest1, "GraphBFSUnitTest1"},
-            {GraphBFSUnitTest2, "GraphBFSUnitTest2"},
-            {GraphShortestPathUnitTest1, "GraphShortestPathUnitTest1"},
-            {GraphShortestPathUnitTest2, "GraphShortestPathUnitTest2"},
-            {GraphShortestPathUnitTest3, "GraphShortestPathUnitTest3"},
-            {GraphShortestPathUnitTest4, "GraphShortestPathUnitTest4"}
+                {LinkedListUnitTest1,                   "LinkedListUnitTest1"},
+                {LinkedListUnitTest2,                   "LinkedListUnitTest2"},
+                {LinkedListCopyConstructorTest1,        "LinkedListCopyConstructorTest1"},
+                {LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1"},
+                {GraphUnitTest1,                        "GraphUnitTest1"},
+                {GraphUnitTest2,                        "GraphUnitTest2"},
+                {GraphCopyConstructorTest1,             "GraphCopyConstructorTest1"},
+                {GraphCopyAssignmentOperatorTest1,      "GraphCopyAssignmentTest1"},
+                {GraphBFSUnitTest1,                     "GraphBFSUnitTest1"},
+                {GraphBFSUnitTest2,                     "GraphBFSUnitTest2"},
+                {GraphShortestPathUnitTest1,            "GraphShortestPathUnitTest1"},
+                {GraphShortestPathUnitTest2,            "GraphShortestPathUnitTest2"},
+                {GraphShortestPathUnitTest3,            "GraphShortestPathUnitTest3"},
+                {GraphShortestPathUnitTest4,            "GraphShortestPathUnitTest4"}
         };
 
         // Iterate through each test, execute it, and print the result
-        for (const auto& test : tests) {
+        for (const auto &test: tests) {
             std::cout << result(test.first, test.second) << std::endl;
         }
         std::cout << "Done" << std::endl;
