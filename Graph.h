@@ -188,29 +188,36 @@ public:
 // --------------------------
 template<typename T>
 class Graph {
+
 private:
+
+// Section: Private Friend Class
+
     friend class UnitTest;
 
-    Node<T> *findVertex(const T &vertex) const {
-        for (auto &i: vertices) {
-            if (i->val == vertex) {
-                return i;
+// Section: Private Member Variables
+
+    std::vector<LinkedList<T> *> edges{};
+    std::vector<Node<T> *> vertices{};
+
+// Section: Private Member Functions
+
+    // Find a vertex in the vertices list by value
+    Node<T> *findVertex(const T &vertexValue) const {
+        for (auto &vertex: vertices) {
+            if (vertex->val == vertexValue) {
+                return vertex;
             }
         }
         return nullptr;
     }
 
-// Find a vertex in the vertices list
+    // Find a vertex in the vertices list by Node
     Node<T> *findVertex(Node<T> *vertex) const {
         return findVertex(vertex->val);
     }
 
-
-// Find the LinkedList that contains the edges for a given vertex
-    LinkedList<T> *findEdge(Node<T> *vertex) const {
-        return findEdge(vertex->val);
-    }
-
+    // Find an edge in the edges list by a vertex value
     LinkedList<T> *findEdge(const T &vertex) const {
         for (auto &edge: edges) {
             if (edge->begin()->val == vertex) {
@@ -220,16 +227,21 @@ private:
         return nullptr;
     }
 
-    std::vector<LinkedList<T> *> edges{};
-    std::vector<Node<T> *> vertices{};
+    // Overloaded findEdge function that takes a Node pointer and uses its value to find the edge
+    LinkedList<T> *findEdge(Node<T> *vertex) const {
+        return findEdge(vertex->val);
+    }
 
 public:
 
+// Section: Public Constructors, Destructor, and Assignment Operator
+
+    // Default Constructor - create an empty Graph
     Graph() {
         edges = std::vector<LinkedList<T> *>();
     }
 
-// Copy constructor - create a deep copy
+    // Copy constructor - create a deep copy
     Graph(const Graph &source) {
         for (auto &i: source.edges) {
             LinkedList<T> *temp = new LinkedList(*i);
@@ -237,34 +249,37 @@ public:
         }
     }
 
+    // Destructor - deallocate memory
     ~Graph() {
         for (auto &i: edges) {
             delete i;
         }
     }
 
-// Copy assignment operator
+    // Copy assignment operator - create a deep copy
     Graph &operator=(const Graph &source) {
         if (this == &source) {
             return *this;
         }
 
         // Clean up existing resources
-        for (auto &i: edges) {
-            delete i;
+        for (auto &edge: edges) {
+            delete edge;
         }
         edges.clear();
 
         // Copy LinkedList from source
-        for (auto &i: source.edges) {
-            LinkedList<T> *temp = new LinkedList(*i);
+        for (auto &edge: source.edges) {
+            LinkedList<T> *temp = new LinkedList(*edge);
             edges.push_back(temp);
         }
 
         return *this;
-    }
+    } // End of copy assignment operator
 
-// This function adds an edge between two vertices in the edges, creating new vertex lists if they don't already exist.
+// Section: Public Member Functions
+
+    // Add an edge between two vertices in the graph
     void addEdge(const T &vertex1, const T &vertex2) {
         LinkedList<T> *list1 = nullptr;
         LinkedList<T> *list2 = nullptr;
@@ -296,27 +311,29 @@ public:
         // Add the vertices
         addVertex(vertex1);
         addVertex(vertex2);
-    }
+    } // End of addEdge
 
-// This function adds a vertex to the vertices list
-    void addVertex(const T &vertex) {
-        for (auto &i: vertices) {
-            if (i->val == vertex) {
+    // Add a vertex to the vertices list by using input value to create a new Node
+    void addVertex(const T &vertexValue) {
+        for (auto &vertex: vertices) {
+            if (vertex->val == vertexValue) {
                 return;
             }
         }
+
         Node<T> *newNode = new Node<T>();
-        newNode->val = vertex;
+        newNode->val = vertexValue;
         vertices.push_back(newNode);
     }
 
-    void breadthFirstSearch(const T &start) {
+    // Breadth-first search traversal of the graph starting from given vertex value
+    void breadthFirstSearch(const T &startVertexValue) {
         // Find the starting vertex
-        Node<T> *startNode = findVertex(start);
+        Node<T> *startNode = findVertex(startVertexValue);
 
         // If the starting vertex is not found, return
         if (startNode == nullptr) {
-            throw std::runtime_error("Error: Start vertex '" + start + "' not found");
+            throw std::runtime_error("Error: Start vertex '" + startVertexValue + "' not found");
         }
 
         // Reset all nodes to initial state before BFS traversal
@@ -326,7 +343,7 @@ public:
             vertex->parent = nullptr;
         }
 
-        // Initialize the BFS queue with the start node and set its initial state.
+        // Initialize the BFS queue with the startVertexValue node and set its initial state.
         LinkedList<T> bfsQueue;
         bfsQueue.enqueue(startNode);
         startNode->color = "gray";
@@ -338,9 +355,9 @@ public:
             processNode(current, bfsQueue);
         }
 
-    }
+    } // End of breadthFirstSearch
 
-// Calculates the shortest path in the graph between two given nodes
+    // Shortest path from two given vertex values using breadth-first search
     std::string shortestPath(const T &start, const T &end) {
 
         // Handle the case where start is the same as end
@@ -380,8 +397,9 @@ public:
         }
 
         return "Shortest path from " + start + " to " + end + ": " + path;
-    }
+    } // End of shortestPath
 
+    // Helper function to process a node during BFS traversal
     void processNode(Node<T> *node, LinkedList<T> &queue) {
         node->color = "black";  // Mark as processed to prevent re-enqueue
         LinkedList<T> *adjacencyList = findEdge(node->val);
@@ -397,10 +415,10 @@ public:
                 queue.enqueue(adjacentVertex);
             }
         }
-    }
+    } // End of processNode
 
-// Prints edges
-    std::string printGraph() const {
+    // Prints edges
+    std::string printGraphEdges() const {
         std::string result;
         for (auto &i: edges) {
             result += i->printLinkedList() + "\n";
@@ -408,15 +426,18 @@ public:
         return result;
     }
 
+
+    // Traverse the graph and print the BFS tree by calling the printBFSTreeHelper function
     void printBFSTree() const {
         Node<T> *parent = nullptr;
-        for (auto &i: vertices) {
-            if (i->parent == nullptr) {
-                printBFSTreeHelper(i, 0);
+        for (auto &vertex: vertices) {
+            if (vertex->parent == nullptr) {
+                printBFSTreeHelper(vertex, 0);
             }
         }
     }
 
+    // Prints the BFS tree where each node is indented based on its level in the tree
     void printBFSTreeHelper(Node<T> *node, int level) const {
         if (node == nullptr) {
             return;
@@ -428,13 +449,13 @@ public:
 
         std::cout << (level == 0 ? "   " : "|- ") << node->val << ": " << node->distance << std::endl;
 
-        for (auto &i: vertices) {
-            if (i->parent == node) {
-                printBFSTreeHelper(i, level + 1);
+        for (auto &childNode: vertices) {
+            if (childNode->parent == node) {
+                printBFSTreeHelper(childNode, level + 1);
             }
         }
-    }
+    } // End of printBFSTreeHelper
 
-};
+}; // End of Graph
 
 #endif

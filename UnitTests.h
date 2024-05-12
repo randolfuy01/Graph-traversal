@@ -80,7 +80,7 @@ class UnitTest {
         graph.addEdge("B", "D");
         graph.addEdge("C", "D");
         std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C\n";
-        std::string actual = graph.printGraph();
+        std::string actual = graph.printGraphEdges();
         std::cout << "actual: \n" << actual << std::endl;
         std::cout << "expected: \n" << expected;
         return expected == actual;
@@ -92,7 +92,7 @@ class UnitTest {
         graph.addEdge("San Francisco", "New York");
         graph.addEdge("Los Angeles", "New York");
         std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
-        std::string actual = graph.printGraph();
+        std::string actual = graph.printGraphEdges();
         std::cout << "actual: \n" << actual << std::endl;
         std::cout << "expected: \n" << expected;
         std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles",   "New York"},
@@ -126,7 +126,7 @@ class UnitTest {
         Graph copiedGraph = originalGraph; // Calls the copy constructor
 
         // Check if the printed representations of the original and copied graph are same
-        return (originalGraph.printGraph() == copiedGraph.printGraph());
+        return (originalGraph.printGraphEdges() == copiedGraph.printGraphEdges());
     }
 
     static bool GraphCopyAssignmentOperatorTest1() {
@@ -143,7 +143,7 @@ class UnitTest {
         copiedGraph = originalGraph;
 
         // Check if the original graph matches the copied graph
-        return (originalGraph.printGraph() == copiedGraph.printGraph());
+        return (originalGraph.printGraphEdges() == copiedGraph.printGraphEdges());
     }
 
     static bool GraphBFSUnitTest1() {
