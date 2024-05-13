@@ -41,10 +41,8 @@ int main() {
     std::cout << "\nGraph adjacency list:" << std::endl;
     std::cout << demoGraph.adjacencyListToString();
 
-    std::cout << "\nBreadth First Search starting at " << "1" << std::endl;
-    demoGraph.breadthFirstSearch(bfsStart);
-
-    demoGraph.printBFSTree();
+    std::cout << "\nBreadth First Search starting at " << bfsStart << ":" << std::endl;
+    demoGraph.printBFSTree(bfsStart);
 
     std::cout << "\n" << demoGraph.shortestPathToString(shortestPathStart, shortestPathEnd) << std::endl;
 

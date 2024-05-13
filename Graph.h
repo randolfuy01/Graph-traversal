@@ -149,7 +149,6 @@ public:
         }
     } // End of enqueue
 
-
     // Remove the first node from the LinkedList and return it
     Node<T> *dequeue() {
 
@@ -168,14 +167,12 @@ public:
     // Return the first node in the LinkedList
     const Node<T> *begin() const { return head; }
 
-
     // Convert a node value to a string to be used in print functions
     std::string to_string(const T &t) const {
         std::ostringstream oss;
         oss << t;
         return oss.str();
     }
-
 
     // Print the LinkedList ex. A -> B -> C -> D
     std::string printLinkedList() const {
@@ -240,6 +237,87 @@ private:
         return findEdge(vertex->val);
     }
 
+    // Helper function to process a node during BFS traversal
+    void processNode(Node<T> *node, LinkedList<T> &queue) {
+        node->color = "black";  // Mark as processed to prevent re-enqueue
+        LinkedList<T> *adjacencyList = findEdge(node->val);
+
+        // Check if adjacencyList is nullptr
+        if (adjacencyList == nullptr) {
+            throw std::runtime_error("Adjacency list for vertex '" + to_string(node->val) + "' not found");
+        }
+
+        // Update distances and enqueue unvisited vertices for BFS traversal
+        for (Node<T> *adjacentNode = adjacencyList->begin()->next;
+             adjacentNode != nullptr; adjacentNode = adjacentNode->next) {
+            Node<T> *adjacentVertex = findVertex(adjacentNode->val);
+            if (adjacentVertex->color == "white") {
+                adjacentVertex->color = "gray";
+                adjacentVertex->distance = node->distance + 1;
+                adjacentVertex->parent = node;
+                queue.enqueue(adjacentVertex);
+            }
+        }
+    } // End of processNode
+
+    // Convert a node value to a string to be used in print functions
+    std::string to_string(const T &t) const {
+        std::ostringstream oss;
+        oss << t;
+        return oss.str();
+    }
+
+    // Prints the BFS tree where each node is indented based on its level in the tree
+    void printBFSTreeHelper(Node<T> *node, int level) const {
+        if (node == nullptr) {
+            return;
+        }
+
+        for (int i = 0; i < level; i++) {
+            std::cout << "   ";
+        }
+
+        std::cout << (level == 0 ? "   " : "|- ") << to_string(node->val) << std::endl;
+
+        for (auto &childNode: vertices) {
+            if (childNode->parent == node) {
+                printBFSTreeHelper(childNode, level + 1);
+            }
+        }
+    } // End of printBFSTreeHelper
+
+
+    // Breadth-first search traversal of the graph starting from given vertex value
+    void breadthFirstSearch(const T &startVertexValue) {
+        // Find the starting vertex
+        Node<T> *startNode = findVertex(startVertexValue);
+
+        // If the starting vertex is not found, return
+        if (startNode == nullptr) {
+            throw std::runtime_error("Error: Start vertex '" + to_string(startVertexValue) + "' not found");
+        }
+
+        // Reset all nodes to initial state before BFS traversal
+        for (auto &vertex: vertices) {
+            vertex->color = "white";
+            vertex->distance = INT_MAX;
+            vertex->parent = nullptr;
+        }
+
+        // Initialize the BFS queue with the startVertexValue node and set its initial state.
+        LinkedList<T> bfsQueue;
+        bfsQueue.enqueue(startNode);
+        startNode->color = "gray";
+        startNode->distance = 0;
+
+        // Dequeue nodes from the BFS queue and process them until the queue is empty.
+        while (bfsQueue.begin() != nullptr) {
+            Node<T> *current = bfsQueue.dequeue();
+            processNode(current, bfsQueue);
+        }
+
+    } // End of breadthFirstSearch
+
 public:
 
 // Section: Public Constructors, Destructor, and Assignment Operator
@@ -251,7 +329,7 @@ public:
 
     // Constructor to add multiple vertices from an initializer list
     Graph(std::initializer_list<T> vertexList) : Graph() {
-        for(const auto& vertexValue : vertexList) {
+        for (const auto &vertexValue: vertexList) {
             addVertex(vertexValue);
         }
     }
@@ -361,43 +439,6 @@ public:
         vertices.push_back(newNode);
     }
 
-    // Breadth-first search traversal of the graph starting from given vertex value
-    void breadthFirstSearch(const T &startVertexValue) {
-        // Find the starting vertex
-        Node<T> *startNode = findVertex(startVertexValue);
-
-        // If the starting vertex is not found, return
-        if (startNode == nullptr) {
-            throw std::runtime_error("Error: Start vertex '" + to_string(startVertexValue) + "' not found");
-        }
-
-        // Reset all nodes to initial state before BFS traversal
-        for (auto &vertex: vertices) {
-            vertex->color = "white";
-            vertex->distance = INT_MAX;
-            vertex->parent = nullptr;
-        }
-
-        // Initialize the BFS queue with the startVertexValue node and set its initial state.
-        LinkedList<T> bfsQueue;
-        bfsQueue.enqueue(startNode);
-        startNode->color = "gray";
-        startNode->distance = 0;
-
-        // Dequeue nodes from the BFS queue and process them until the queue is empty.
-        while (bfsQueue.begin() != nullptr) {
-            Node<T> *current = bfsQueue.dequeue();
-            processNode(current, bfsQueue);
-        }
-
-    } // End of breadthFirstSearch
-
-    // Convert a node value to a string to be used in print functions
-    std::string to_string(const T &t) const {
-        std::ostringstream oss;
-        oss << t;
-        return oss.str();
-    }
 
     // Shortest path from two given vertex values using breadth-first search
     std::string shortestPathToString(const T &start, const T &end) {
@@ -406,7 +447,6 @@ public:
         if (start == end) {
             return "Shortest path from " + to_string(start) + " to " + to_string(end) + ": " + to_string(start);
         }
-
 
         // Execute breadth-first search from the start node
         try {
@@ -439,29 +479,6 @@ public:
         return "Shortest path from " + to_string(start) + " to " + to_string(end) + ": " + path;
     } // End of shortestPathToString
 
-    // Helper function to process a node during BFS traversal
-    void processNode(Node<T> *node, LinkedList<T> &queue) {
-        node->color = "black";  // Mark as processed to prevent re-enqueue
-        LinkedList<T> *adjacencyList = findEdge(node->val);
-
-        // Check if adjacencyList is nullptr
-        if (adjacencyList == nullptr) {
-            throw std::runtime_error("Adjacency list for vertex '" + to_string(node->val) + "' not found");
-        }
-
-        // Update distances and enqueue unvisited vertices for BFS traversal
-        for (Node<T> *adjacentNode = adjacencyList->begin()->next;
-             adjacentNode != nullptr; adjacentNode = adjacentNode->next) {
-            Node<T> *adjacentVertex = findVertex(adjacentNode->val);
-            if (adjacentVertex->color == "white") {
-                adjacentVertex->color = "gray";
-                adjacentVertex->distance = node->distance + 1;
-                adjacentVertex->parent = node;
-                queue.enqueue(adjacentVertex);
-            }
-        }
-    } // End of processNode
-
     // Prints edges
     std::string adjacencyListToString() const {
         std::string result;
@@ -471,9 +488,10 @@ public:
         return result;
     }
 
-
     // Traverse the graph and print the BFS tree by calling the printBFSTreeHelper function
-    void printBFSTree() const {
+    void printBFSTree(const T &startVertexValue) {
+        breadthFirstSearch(startVertexValue);
+
         Node<T> *parent = nullptr;
         for (auto &vertex: vertices) {
             if (vertex->parent == nullptr) {
@@ -481,25 +499,6 @@ public:
             }
         }
     }
-
-    // Prints the BFS tree where each node is indented based on its level in the tree
-    void printBFSTreeHelper(Node<T> *node, int level) const {
-        if (node == nullptr) {
-            return;
-        }
-
-        for (int i = 0; i < level; i++) {
-            std::cout << "   ";
-        }
-
-        std::cout << (level == 0 ? "   " : "|- ") << to_string(node->val) << std::endl;
-
-        for (auto &childNode: vertices) {
-            if (childNode->parent == node) {
-                printBFSTreeHelper(childNode, level + 1);
-            }
-        }
-    } // End of printBFSTreeHelper
 
 }; // End of Graph
 
