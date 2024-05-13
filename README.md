@@ -15,9 +15,9 @@ Review these slides first. The last slide lists the requirements of this project
       - [x] Copy Constructor
       - [x] Copy Assignment Operator
 - [x] Member functions to construct a graph such as adding vertices and edges
-- [ ] Implement the BFS algorithm on Slide 7
-- [ ] Print out the BFS-tree from a given source vertex
-- [ ] Print the shortest path from s to v by implement the recursive algorithm on Slide 10
+- [x] Implement the BFS algorithm on Slide 7
+- [x] Print out the BFS-tree from a given source vertex
+- [x] Print the shortest path from s to v by implement the recursive algorithm on Slide 10
 
 ## Submission:
 
