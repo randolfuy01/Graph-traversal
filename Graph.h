@@ -7,6 +7,18 @@
 #include <climits>  // For INT_MAX
 
 // --------------------------
+// Free-standing Functions
+// --------------------------
+
+// Convert template type to strings for printing purposes
+template<typename T>
+std::string to_string(const T &t) {
+    std::ostringstream oss;
+    oss << t;
+    return oss.str();
+}
+
+// --------------------------
 // Node Struct Declaration
 // --------------------------
 template<typename T>
@@ -17,6 +29,7 @@ struct Node {
     Node *parent = nullptr;
     int distance = INT_MAX; // signifies unvisited or unreachable node
 };
+
 
 // --------------------------
 // LinkedList Class Declaration
@@ -166,12 +179,6 @@ public:
     // Return the first node in the LinkedList
     const Node<T> *begin() const { return head; }
 
-    // Convert a node value to a string to be used in print functions
-    std::string to_string(const T &t) const {
-        std::ostringstream oss;
-        oss << t;
-        return oss.str();
-    }
 
     // Print the LinkedList ex. A -> B -> C -> D
     std::string printLinkedList() const {
@@ -258,13 +265,6 @@ private:
             }
         }
     } // End of processNode
-
-    // Convert a node value to a string to be used in print functions
-    std::string to_string(const T &t) const {
-        std::ostringstream oss;
-        oss << t;
-        return oss.str();
-    }
 
     // Prints the BFS tree where each node is indented based on its level in the tree
     void printBFSTreeHelper(Node<T> *node, int level) const {
