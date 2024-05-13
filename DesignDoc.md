@@ -42,7 +42,6 @@
 - ***enqueue(Node<T> newNode)**: Adds an existing node to the end of the list.
 - **dequeue():** Removes and returns the first node from the list, supporting the queue functionality required in BFS.
 - **begin() const:** Returns the first node in the list, allowing iteration from the start of the list.
-- **to_string(const T& t) const:** Converts a node’s value to a string, useful for printing node values when using templates.
 - **printLinkedList() const:** Returns a string representation of the entire list, showing all nodes in a chain (e.g., "A -> B -> C").
 
 ### Graph Class Functions
@@ -57,6 +56,9 @@
 - **adjacencyListToString() const:** Provides a string representation of all adjacency lists in the graph, useful for debugging and visualization.
 - **printBFSTree(const T& startVertexValue):** Prints a BFS traversal tree starting from a specified vertex, useful for visualizing the structure of the graph post-BFS.
 
+### Free-standing Functions
+
+- **to_string(const T& t):** Converts template values, such as the node of our graph's value, to a string; useful for printing node values when using templates.
 
 **for some functions, you should consider to describe it in pseudocode, For example, if you choose to generate a visual representation of the BFS tree. (No need to include the BFS and shortest-path algorithms. Simply referring to the corresponding slides will suffice.)**
 
