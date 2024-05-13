@@ -285,38 +285,6 @@ private:
         }
     } // End of printBFSTreeHelper
 
-
-    // Breadth-first search traversal of the graph starting from given vertex value
-    void breadthFirstSearch(const T &startVertexValue) {
-        // Find the starting vertex
-        Node<T> *startNode = findVertex(startVertexValue);
-
-        // If the starting vertex is not found, return
-        if (startNode == nullptr) {
-            throw std::runtime_error("Error: Start vertex '" + to_string(startVertexValue) + "' not found");
-        }
-
-        // Reset all nodes to initial state before BFS traversal
-        for (auto &vertex: vertices) {
-            vertex->color = "white";
-            vertex->distance = INT_MAX;
-            vertex->parent = nullptr;
-        }
-
-        // Initialize the BFS queue with the startVertexValue node and set its initial state.
-        LinkedList<T> bfsQueue;
-        bfsQueue.enqueue(startNode);
-        startNode->color = "gray";
-        startNode->distance = 0;
-
-        // Dequeue nodes from the BFS queue and process them until the queue is empty.
-        while (bfsQueue.begin() != nullptr) {
-            Node<T> *current = bfsQueue.dequeue();
-            processNode(current, bfsQueue);
-        }
-
-    } // End of breadthFirstSearch
-
 public:
 
 // Section: Public Constructors, Destructor, and Assignment Operator
@@ -438,6 +406,36 @@ public:
         vertices.push_back(newNode);
     }
 
+    // Breadth-first search traversal of the graph starting from given vertex value
+    void breadthFirstSearch(const T &startVertexValue) {
+        // Find the starting vertex
+        Node<T> *startNode = findVertex(startVertexValue);
+
+        // If the starting vertex is not found, return
+        if (startNode == nullptr) {
+            throw std::runtime_error("Error: Start vertex '" + to_string(startVertexValue) + "' not found");
+        }
+
+        // Reset all nodes to initial state before BFS traversal
+        for (auto &vertex: vertices) {
+            vertex->color = "white";
+            vertex->distance = INT_MAX;
+            vertex->parent = nullptr;
+        }
+
+        // Initialize the BFS queue with the startVertexValue node and set its initial state.
+        LinkedList<T> bfsQueue;
+        bfsQueue.enqueue(startNode);
+        startNode->color = "gray";
+        startNode->distance = 0;
+
+        // Dequeue nodes from the BFS queue and process them until the queue is empty.
+        while (bfsQueue.begin() != nullptr) {
+            Node<T> *current = bfsQueue.dequeue();
+            processNode(current, bfsQueue);
+        }
+
+    } // End of breadthFirstSearch
 
     // Shortest path from two given vertex values using breadth-first search
     std::string shortestPathToString(const T &start, const T &end) {
