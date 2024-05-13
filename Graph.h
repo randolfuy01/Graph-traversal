@@ -338,7 +338,15 @@ public:
         // Add the vertices
         addVertex(vertex1);
         addVertex(vertex2);
+
     } // End of addEdge
+
+    // Overloaded addEdge to accept initializer_list of pairs
+    void addEdge(std::initializer_list<std::pair<T, T>> edgePairs) {
+        for (const auto &pair: edgePairs) {
+            addEdge(pair.first, pair.second);
+        }
+    }
 
     // Add a vertex to the vertices list by using input value to create a new Node
     void addVertex(const T &vertexValue) {
