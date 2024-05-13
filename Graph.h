@@ -158,13 +158,12 @@ public:
             return nullptr;
         }
 
-        Node<T> *current = head;
-        Node<T> *previous = nullptr;
-
         Node<T> *temp = head;
         head = head->next;
+        temp->next = nullptr; // Disconnect the node from the LinkedList
+
         return temp;
-    } // End of dequeue
+    }
 
     // Return the first node in the LinkedList
     const Node<T> *begin() const { return head; }
@@ -250,18 +249,32 @@ public:
         edges = std::vector<LinkedList<T> *>();
     }
 
+    // Constructor to add multiple vertices from an initializer list
+    Graph(std::initializer_list<T> vertexList) : Graph() {
+        for(const auto& vertexValue : vertexList) {
+            addVertex(vertexValue);
+        }
+    }
+
     // Copy constructor - create a deep copy
     Graph(const Graph &source) {
-        for (auto &i: source.edges) {
-            LinkedList<T> *temp = new LinkedList(*i);
+        for (auto &edge: source.edges) {
+            LinkedList<T> *temp = new LinkedList(*edge);
             edges.push_back(temp);
+        }
+        for (auto &vertex: source.vertices) {
+            Node<T> *tempNode = new Node<T>(*vertex);
+            vertices.push_back(tempNode);
         }
     }
 
     // Destructor - deallocate memory
     ~Graph() {
-        for (auto &i: edges) {
-            delete i;
+        for (auto &edge: edges) {
+            delete edge;
+        }
+        for (auto &vertex: vertices) {
+            delete vertex;
         }
     }
 
@@ -347,7 +360,7 @@ public:
 
         // If the starting vertex is not found, return
         if (startNode == nullptr) {
-            throw std::runtime_error("Error: Start vertex '" + startVertexValue + "' not found");
+            throw std::runtime_error("Error: Start vertex '" + to_string(startVertexValue) + "' not found");
         }
 
         // Reset all nodes to initial state before BFS traversal
@@ -371,12 +384,19 @@ public:
 
     } // End of breadthFirstSearch
 
+    // Convert a node value to a string to be used in print functions
+    std::string to_string(const T &t) const {
+        std::ostringstream oss;
+        oss << t;
+        return oss.str();
+    }
+
     // Shortest path from two given vertex values using breadth-first search
-    std::string shortestPath(const T &start, const T &end) {
+    std::string shortestPathToString(const T &start, const T &end) {
 
         // Handle the case where start is the same as end
         if (start == end) {
-            return "Shortest path from " + start + " to " + end + ": " + start;
+            return "Shortest path from " + to_string(start) + " to " + to_string(end) + ": " + to_string(start);
         }
 
 
@@ -384,7 +404,7 @@ public:
         try {
             breadthFirstSearch(start);
         } catch (const std::runtime_error &e) {
-            return e.what();
+            return e.what(); // Return error message if start vertex is not found
         }
 
         // Find the start and end nodes
@@ -392,31 +412,34 @@ public:
         Node<T> *endNode = findVertex(end);
 
         // Check and handle different error scenarios
-        if (startNode == nullptr) {
-            return "Error: Start vertex '" + start + "' not found";
-        }
         if (endNode == nullptr) {
-            return "Error: End vertex '" + end + "' not found";
+            return "Error: End vertex '" + to_string(end) + "' not found";
         }
+
         if (endNode->parent == nullptr) {
-            return "No path from " + start + " to " + end;
+            return "No path from " + to_string(start) + " to " + to_string(end);
         }
 
         // Construct the path from end to start using parent pointers
-        std::string path = endNode->val;
+        std::string path = to_string(endNode->val);
         Node<T> *current = endNode->parent;
         while (current != nullptr) {
-            path = current->val + " -> " + path;
+            path = to_string(current->val) + " -> " + path;
             current = current->parent;
         }
 
-        return "Shortest path from " + start + " to " + end + ": " + path;
-    } // End of shortestPath
+        return "Shortest path from " + to_string(start) + " to " + to_string(end) + ": " + path;
+    } // End of shortestPathToString
 
     // Helper function to process a node during BFS traversal
     void processNode(Node<T> *node, LinkedList<T> &queue) {
         node->color = "black";  // Mark as processed to prevent re-enqueue
         LinkedList<T> *adjacencyList = findEdge(node->val);
+
+        // Check if adjacencyList is nullptr
+        if (adjacencyList == nullptr) {
+            throw std::runtime_error("Adjacency list for vertex '" + to_string(node->val) + "' not found");
+        }
 
         // Update distances and enqueue unvisited vertices for BFS traversal
         for (Node<T> *adjacentNode = adjacencyList->begin()->next;
@@ -432,10 +455,10 @@ public:
     } // End of processNode
 
     // Prints edges
-    std::string printGraphEdges() const {
+    std::string adjacencyListToString() const {
         std::string result;
-        for (auto &i: edges) {
-            result += i->printLinkedList() + "\n";
+        for (auto &edge: edges) {
+            result += edge->printLinkedList() + "\n";
         }
         return result;
     }
@@ -461,7 +484,7 @@ public:
             std::cout << "   ";
         }
 
-        std::cout << (level == 0 ? "   " : "|- ") << node->val << ": " << node->distance << std::endl;
+        std::cout << (level == 0 ? "   " : "|- ") << to_string(node->val) << std::endl;
 
         for (auto &childNode: vertices) {
             if (childNode->parent == node) {

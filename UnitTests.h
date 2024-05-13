@@ -76,7 +76,7 @@ private:
         return (list2.printLinkedList() == "1 -> 2");
     }
 
-    static bool GraphUnitTest1() {
+    static bool GraphAdjacencyListTest1() {
         Graph<char> graph = *new Graph<char>();
         graph.addEdge('A', 'B');
         graph.addEdge('A', 'C');
@@ -85,17 +85,17 @@ private:
         graph.addEdge('B', 'D');
         graph.addEdge('C', 'D');
         std::string expected = "A -> B -> C -> D\nB -> A -> C -> D\nC -> A -> B -> D\nD -> A -> B -> C\n";
-        std::string actual = graph.printGraphEdges();
+        std::string actual = graph.adjacencyListToString();
         return expected == actual;
     }
 
-    static bool GraphUnitTest2() {
+    static bool GraphAdjacencyListTest2() {
         Graph graph = *new Graph<std::string>();
         graph.addEdge("San Francisco", "Los Angeles");
         graph.addEdge("San Francisco", "New York");
         graph.addEdge("Los Angeles", "New York");
         std::string expected = "San Francisco -> Los Angeles -> New York\nLos Angeles -> San Francisco -> New York\nNew York -> San Francisco -> Los Angeles\n";
-        std::string actual = graph.printGraphEdges();
+        std::string actual = graph.adjacencyListToString();
         std::vector<std::vector<std::string>> expectedValues = {{"San Francisco", "Los Angeles",   "New York"},
                                                                 {"Los Angeles",   "San Francisco", "New York"},
                                                                 {"New York",      "San Francisco", "Los Angeles"}};
@@ -127,7 +127,7 @@ private:
         Graph copiedGraph = originalGraph; // Calls the copy constructor
 
         // Check if the printed representations of the original and copied graph are same
-        return (originalGraph.printGraphEdges() == copiedGraph.printGraphEdges());
+        return (originalGraph.adjacencyListToString() == copiedGraph.adjacencyListToString());
     }
 
     static bool GraphCopyAssignmentOperatorTest1() {
@@ -144,7 +144,7 @@ private:
         copiedGraph = originalGraph;
 
         // Check if the original graph matches the copied graph
-        return (originalGraph.printGraphEdges() == copiedGraph.printGraphEdges());
+        return (originalGraph.adjacencyListToString() == copiedGraph.adjacencyListToString());
     }
 
     static bool GraphBFSUnitTest1() {
@@ -214,7 +214,7 @@ private:
         graph.addEdge("J", "K");
 
         std::string expected = "Shortest path from A to I: A -> C -> I";
-        std::string actual = graph.shortestPath("A", "I");
+        std::string actual = graph.shortestPathToString("A", "I");
 
         return expected == actual;
     }
@@ -228,7 +228,7 @@ private:
         graph.addEdge("D", "E");
 
         std::string expected = "Error: Start vertex 'X' not found";
-        std::string actual = graph.shortestPath("X", "B"); // Non-existent start vertex
+        std::string actual = graph.shortestPathToString("X", "B"); // Non-existent start vertex
 
         return expected == actual;
     }
@@ -242,7 +242,7 @@ private:
         graph.addEdge("D", "E");
 
         std::string expected = "Error: End vertex 'Y' not found";
-        std::string actual = graph.shortestPath("A", "Y"); // Non-existent end vertex
+        std::string actual = graph.shortestPathToString("A", "Y"); // Non-existent end vertex
 
         return actual == expected;
     }
@@ -258,7 +258,7 @@ private:
         graph.addVertex("Z");
 
         std::string expected = "No path from A to Z";
-        std::string actual = graph.shortestPath("A", "Z");
+        std::string actual = graph.shortestPathToString("A", "Z");
 
         return actual == expected;
     }
@@ -283,8 +283,8 @@ public:
                 {LinkedListCharUnitTest,                "LinkedListCharUnitTest"},
                 {LinkedListCopyConstructorTest1,        "LinkedListCopyConstructorTest1"},
                 {LinkedListCopyAssignmentOperatorTest1, "LinkedListCopyAssignmentOperatorTest1"},
-                {GraphUnitTest1,                        "GraphUnitTest1"},
-                {GraphUnitTest2,                        "GraphUnitTest2"},
+                {GraphAdjacencyListTest1,               "GraphAdjacencyListTest1"},
+                {GraphAdjacencyListTest2,               "GraphAdjacencyListTest2"},
                 {GraphCopyConstructorTest1,             "GraphCopyConstructorTest1"},
                 {GraphCopyAssignmentOperatorTest1,      "GraphCopyAssignmentTest1"},
                 {GraphBFSUnitTest1,                     "GraphBFSUnitTest1"},
@@ -301,6 +301,10 @@ public:
         }
 
         std::cout << "Done" << std::endl;
+
+
+
+
     }
 };
 
