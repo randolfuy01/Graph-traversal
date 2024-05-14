@@ -92,5 +92,25 @@ int main() {
     std::cout << "          END CSC 340 Graph Demo 2";
     std::cout << "\n-------------------------------------------------\n";
 
+    std::cout << "\n-------------------------------------------------\n";
+    std::cout << "          CSC 340 In Class Demo";
+    std::cout << "\n-------------------------------------------------\n";
+    std::initializer_list<int> v = {0,1,2,3,4,5,6};
+    std::initializer_list<std::pair<int,int>> e = {{0,1},{0,4},{1,2},{1,3},{2,3},{2,5}, {4,2}, {4,5}, {5,6}, {1,5}};
+    Graph<int> inClassExample = v;
+    inClassExample.addEdge(e);
+    std::cout << "\nGraph adjacency list:" << std::endl;
+    std::cout << inClassExample.adjacencyListToString();
+    int inClassParentNode = 3;
+    int inClassPathStart = 0;
+    int inClassPathEnd = 5;
+
+    std::cout << "\nBreadth First Search starting at " << inClassParentNode << ":" << std::endl;
+    inClassExample.printBFSTree(inClassParentNode);
+    std::cout << "\n" << inClassExample.shortestPathToString(inClassPathStart, inClassPathEnd) << std::endl;
+
+    std::cout << "\n-------------------------------------------------\n";
+    std::cout << "          END CSC 340 In Class Demo";
+    std::cout << "\n-------------------------------------------------\n";
     return 0;
 }
