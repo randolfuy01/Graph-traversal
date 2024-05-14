@@ -39,5 +39,7 @@ During the demo, you will:
    - V: {0 1, 2, 3, 4, 5, 6, ...}      //the set of nodes, numbered sequentially from 1  
    - E: {(0, 3), (1,2),  (2, 3), ...}  //the set of undirected edges  
    - a source node for your program to produce a BFS-tree
-   - a pair of nodes in V for your program to produce a shortest path
+   - a pair of nodes in V for your program to produce the shortest path
 
+Example Graph for DEMO 2:
+![alt text](Demo2Graph.png?raw=true "Demo2Graph")
