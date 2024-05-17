@@ -45,7 +45,9 @@ int main() {
     std::cout << "\nBreadth First Search starting at " << bfsStart << ":" << std::endl;
     demoGraph.printBFSTree(bfsStart);
 
-    std::cout << "\n" << demoGraph.shortestPathToString(shortestPathStart, shortestPathEnd) << std::endl;
+    std::cout << "\n" << demoGraph.shortestPathToString(shortestPathStart,
+                                                        shortestPathEnd)
+                                                        << std::endl;
     std::cout << "\n-------------------------------------------------\n";
     std::cout << "          END CSC 340 Graph Demo 1";
     std::cout << "\n-------------------------------------------------\n";
@@ -54,21 +56,25 @@ int main() {
     std::cout << "\n-------------------------------------------------\n";
 
     // Set variables of the graph
-    std::initializer_list<std::string> vertices2 = {"San Francisco", "Los Angeles", "Las Vegas", "Salt Lake City", "Denver", "Phoenix", "Albuquerque", "Dallas" , "New York"};
+    std::initializer_list<std::string> vertices2 = {"San Francisco", "Los Angeles",
+                                                    "Las Vegas", "Salt Lake City",
+                                                    "Denver", "Phoenix",
+                                                    "Albuquerque", "Dallas",
+                                                    "New York"};
 
     std::initializer_list<std::pair<std::string, std::string>> edges2 = {
-            {"San Francisco", "Los Angeles"},
-            {"San Francisco", "Las Vegas"},
-            {"Los Angeles", "Las Vegas"},
-            {"Los Angeles", "Phoenix"},
-            {"Las Vegas", "Phoenix"},
-            {"Las Vegas", "Salt Lake City"},
+            {"San Francisco",  "Los Angeles"},
+            {"San Francisco",  "Las Vegas"},
+            {"Los Angeles",    "Las Vegas"},
+            {"Los Angeles",    "Phoenix"},
+            {"Las Vegas",      "Phoenix"},
+            {"Las Vegas",      "Salt Lake City"},
             {"Salt Lake City", "Denver"},
-            {"Phoenix", "Albuquerque"},
-            {"Phoenix", "Dallas"},
-            {"Albuquerque", "Dallas"},
-            {"Albuquerque", "New York"},
-            {"Dallas", "New York"}
+            {"Phoenix",        "Albuquerque"},
+            {"Phoenix",        "Dallas"},
+            {"Albuquerque",    "Dallas"},
+            {"Albuquerque",    "New York"},
+            {"Dallas",         "New York"}
     };
 
     // Set variables for the BFS and shortest path
@@ -86,7 +92,9 @@ int main() {
     std::cout << "\nBreadth First Search starting at " << bfsStart2 << ":" << std::endl;
     demoGraph2.printBFSTree(bfsStart2);
 
-    std::cout << "\n" << demoGraph2.shortestPathToString(shortestPathStart2, shortestPathEnd2) << std::endl;
+    std::cout << "\n" << demoGraph2.shortestPathToString(shortestPathStart2,
+                                                         shortestPathEnd2)
+                                                         << std::endl;
 
     std::cout << "\n-------------------------------------------------\n";
     std::cout << "          END CSC 340 Graph Demo 2";
@@ -95,8 +103,17 @@ int main() {
     std::cout << "\n-------------------------------------------------\n";
     std::cout << "          CSC 340 In Class Demo";
     std::cout << "\n-------------------------------------------------\n";
-    std::initializer_list<int> v = {0,1,2,3,4,5,6};
-    std::initializer_list<std::pair<int,int>> e = {{0,1},{0,4},{1,2},{1,3},{2,3},{2,5}, {4,2}, {4,5}, {5,6}, {1,5}};
+    std::initializer_list<int> v = {0, 1, 2, 3, 4, 5, 6};
+    std::initializer_list<std::pair<int, int>> e = {{0, 1},
+                                                    {0, 4},
+                                                    {1, 2},
+                                                    {1, 3},
+                                                    {2, 3},
+                                                    {2, 5},
+                                                    {4, 2},
+                                                    {4, 5},
+                                                    {5, 6},
+                                                    {1, 5}};
     Graph<int> inClassExample = v;
     inClassExample.addEdge(e);
     std::cout << "\nGraph adjacency list:" << std::endl;
@@ -107,7 +124,9 @@ int main() {
 
     std::cout << "\nBreadth First Search starting at " << inClassParentNode << ":" << std::endl;
     inClassExample.printBFSTree(inClassParentNode);
-    std::cout << "\n" << inClassExample.shortestPathToString(inClassPathStart, inClassPathEnd) << std::endl;
+    std::cout << "\n" << inClassExample.shortestPathToString(inClassPathStart,
+                                                             inClassPathEnd)
+                                                             << std::endl;
 
     std::cout << "\n-------------------------------------------------\n";
     std::cout << "          END CSC 340 In Class Demo";
